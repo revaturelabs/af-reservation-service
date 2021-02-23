@@ -1,4 +1,4 @@
-package com.revature;
+package com.revature.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +8,7 @@ class ReservationServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }
