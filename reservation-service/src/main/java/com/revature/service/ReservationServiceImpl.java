@@ -1,12 +1,18 @@
 package com.revature.service;
 
 import com.revature.model.Reservation;
+import com.revature.repository.ReservationRepository;
 import com.revature.service.ReservationService;
 
 import java.util.List;
 
 public class ReservationServiceImpl implements ReservationService {
 
+    private final ReservationRepository repository;
+
+    public ReservationServiceImpl(ReservationRepository repository) {
+        this.repository = repository;
+    }
     @Override
     public Reservation addReservation(Reservation reservation) {
         return null;
@@ -33,7 +39,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllReservationsByRoomId(Integer roomId) {
+    public List<Reservation> getAllReservationsByRoomId(Integer buildingId, Integer roomId) {
         return null;
     }
+
+    @Override
+    public List<Reservation> getAllReservationsByRoomType(Integer buildingId, String roomType) {
+        return null;
+    }
+
+
 }

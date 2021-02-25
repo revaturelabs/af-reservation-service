@@ -11,6 +11,7 @@ public interface ReservationService {
     void deleteReservation(Integer reservationId);
     List<Reservation> getAllReservations();
     void assignBatch(Integer batchId);
-    List<Reservation> getAllReservationsByRoomId(Integer roomId);
+    List<Reservation> getAllReservationsByRoomId(Integer buildingId, Integer roomId);
+    List<Reservation> getAllReservationsByRoomType(Integer buildingId, String roomType);
 
 }
