@@ -42,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void assignBatch(Integer reservationId, Integer batchId) {
+    public void assignBatch(Integer batchId) {
 
     }
 
