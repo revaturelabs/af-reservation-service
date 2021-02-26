@@ -12,7 +12,7 @@ public interface ReservationService {
     Reservation addReservation(Reservation reservation);
     Reservation updateReservation(Reservation reservation);
     void deleteReservation(Integer reservationId);
-    void assignBatch(Integer reservationId, Integer batchId);
+    void assignBatch(Reservation reservation, Integer batchId);
   	boolean isValidReservation(Reservation reservation);
     List<Reservation> getAllAvailableRoomsByType(Integer BuildingId, String roomType);
 }
