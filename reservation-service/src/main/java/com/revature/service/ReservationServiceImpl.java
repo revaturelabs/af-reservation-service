@@ -51,6 +51,11 @@ public class ReservationServiceImpl implements ReservationService {
         return null;
     }
 
+    @Override
+    public List<Reservation> getAllAvailableRoomsByType(Integer BuildingId, String roomType) {
+        return null;
+    }
+
 	@Override
 	public boolean isValidReservation(Reservation reservation) {
 //		TODO Complete method
@@ -65,5 +70,7 @@ public class ReservationServiceImpl implements ReservationService {
 //		}
 		return false;
 	}
+
+
 
 }
