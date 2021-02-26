@@ -12,6 +12,7 @@ public interface ReservationService {
     Reservation addReservation(Reservation reservation);
     Reservation updateReservation(Reservation reservation);
     void deleteReservation(Integer reservationId);
-    void assignBatch(Integer batchId);
+    void assignBatch(Integer reservationId, Integer batchId);
   	boolean isValidReservation(Reservation reservation);
+    List<Reservation> findTrainingStations();
 }
