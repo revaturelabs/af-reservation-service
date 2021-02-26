@@ -2,6 +2,7 @@ package com.revature.controller;
 
 import com.revature.model.Reservation;
 import com.revature.service.ReservationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @Autowired
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }

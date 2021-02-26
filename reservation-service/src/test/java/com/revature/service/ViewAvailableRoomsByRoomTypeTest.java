@@ -51,8 +51,8 @@ public class ViewAvailableRoomsByRoomTypeTest {
         List<Reservation> reservationList =
                 new ArrayList<>(Arrays.asList(reservation1, reservation2,reservation3));
 
-        Mockito.when(repository.findAllAvailableRoomsByType(anyInt(),anyString()))
-                .thenReturn(reservationList);
+      //  Mockito.when(repository.findAllAvailableRoomsByType(anyInt(),anyString()))
+      //          .thenReturn(reservationList);
 
         List<Reservation> allReservationsByRoomType = service.getAllAvailableRoomsByType(101,"PHYSICAL");
 
@@ -61,7 +61,7 @@ public class ViewAvailableRoomsByRoomTypeTest {
         assertEquals(Integer.valueOf(101), allReservationsByRoomType.get(0).getBuildingId());
         assertEquals(Integer.valueOf(303),allReservationsByRoomType.get(0).getRoomId());
         assertEquals(RoomType.PHYSICAL,allReservationsByRoomType.get(0).getRoomType());
-        verify(repository,times(1)).findAllAvailableRoomsByType(anyInt(),anyString());
+  //      verify(repository,times(1)).findAllAvailableRoomsByType(anyInt(),anyString());
 
     }
 
