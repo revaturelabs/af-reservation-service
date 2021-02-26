@@ -42,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void assignBatch(Reservation reservation, Integer batchId) {
+    public void assignBatch(Integer reservationId, Integer batchId) {
 
     }
 
@@ -56,7 +56,12 @@ public class ReservationServiceImpl implements ReservationService {
         return null;
     }
 
-	@Override
+    @Override
+    public List<Reservation> findTrainingStations() {
+        return null;
+    }
+
+    @Override
 	public boolean isValidReservation(Reservation reservation) {
 //		TODO Complete method
 //		List<Reservation> reservations = new ArrayList<>();

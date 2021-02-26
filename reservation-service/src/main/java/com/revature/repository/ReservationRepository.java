@@ -1,13 +1,13 @@
 package com.revature.repository;
 
 import com.revature.model.Reservation;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReservationRepository extends CrudRepository<Reservation,Integer> {
+public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 
-    List<Reservation> findAllReservationsByRoomId(Integer roomId);
-    List<Reservation> findAllAvailableRoomsByType(Integer buildingId, String roomType);
+   // List<Reservation> findAllReservationsByRoomId(Integer roomId);
+   // List<Reservation> findAllAvailableRoomsByType(Integer buildingId, String roomType);
 }

@@ -1,11 +1,16 @@
 package com.revature.model;
 
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Entity
+@Table(name="reservation")
 public class Reservation {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
 	private Integer batchId;
 	private Integer buildingId;
@@ -13,13 +18,17 @@ public class Reservation {
 	private Integer roomId;
 	private RoomType roomType;
 	private String reserver;
+
+	@Column(name = "start_date")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDate;
+
+	@Column(name = "end_date")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate;
 
-
-	
-	//set date/time format
-	private final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("MM-DD-YYYY HH:MM");
+	@Transient
+	private final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("MM-dd-yyyy HH:mm");
 
 
 	public Reservation() {
@@ -37,7 +46,6 @@ public class Reservation {
 		this.roomId = roomId;
 		this.roomType = roomType;
 		this.reserver = reserver;
-		DATEFORMAT.format(this.startDate); 
 		try {
 			this.startDate = DATEFORMAT.parse( startDate );
 			this.endDate = DATEFORMAT.parse( endDate );
@@ -45,8 +53,6 @@ public class Reservation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 	}
 
 	public Integer getReservationId() {
@@ -132,20 +138,4 @@ public class Reservation {
 			e.printStackTrace();
 		}
 	}
-
-	//	public Date getStartTime() {
-	//		return startTime;
-	//	}
-	//
-	//	public void setStartTime(Time startTime) {
-	//		this.startTime = startTime;
-	//	}
-	//
-	//	public Time getEndTime() {
-	//		return endTime;
-	//	}
-	//
-	//	public void setEndTime(Time endTime) {
-	//		this.endTime = endTime;
-	//	}
 }
