@@ -2,10 +2,12 @@ package com.revature.service;
 
 import com.revature.model.Reservation;
 import com.revature.repository.ReservationRepository;
-import com.revature.service.ReservationService;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository repository;
@@ -13,6 +15,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationServiceImpl(ReservationRepository repository) {
         this.repository = repository;
     }
+
     @Override
     public Reservation addReservation(Reservation reservation) {
         return null;
@@ -34,19 +37,33 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void assignBatch(Integer batchId) {
-
-    }
-
-    @Override
-    public List<Reservation> getAllReservationsByRoomId(Integer buildingId, Integer roomId) {
+    public Reservation getReservationById(Integer reservationId) {
         return null;
     }
 
     @Override
-    public List<Reservation> getAllReservationsByRoomType(Integer buildingId, String roomType) {
+    public void assignBatch(Integer reservationId, Integer batchId) {
+
+    }
+
+    @Override
+    public List<Reservation> getAllReservationsByRoomId(Integer roomId) {
         return null;
     }
 
+	@Override
+	public boolean isValidReservation(Reservation reservation) {
+//		TODO Complete method
+//		List<Reservation> reservations = new ArrayList<>();
+//		repository.findAllReservationsByRoomId(reservation.getRoomId()).forEach(
+//				res -> reservations.add(res));
+//		
+//		for(Reservation res : reservations) {
+//			if( reservation.getEndDate()  ) {
+//				
+//			}
+//		}
+		return false;
+	}
 
 }
