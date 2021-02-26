@@ -10,9 +10,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -31,26 +32,15 @@ public class ScheduledReservationsTest {
     @Test
     public void scheduledReservationsByRoomTest() {
 
-        Reservation reservation1 = new Reservation();
-        reservation1.setReservationId(1);
-        reservation1.setRoomType(RoomType.PHYSICAL);
-        reservation1.setReserver("Revature CEO");
-        reservation1.setBuildingId(1);
-        reservation1.setRoomId(2);
-
-        Reservation reservation2 = new Reservation();
-        reservation2.setReservationId(2);
-        reservation2.setRoomType(RoomType.PHYSICAL);
-        reservation2.setReserver("Revature CEO");
-        reservation2.setBuildingId(1);
-        reservation2.setRoomId(2);
-
-        Reservation reservation3 = new Reservation();
-        reservation3.setReservationId(3);
-        reservation3.setRoomType(RoomType.PHYSICAL);
-        reservation3.setReserver("Revature CEO");
-        reservation3.setBuildingId(1);
-        reservation3.setRoomId(2);
+        Reservation reservation1 = new Reservation(
+                1,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-17-2021 09:00","01-17-2021 17:00");
+        Reservation reservation2 = new Reservation(
+                2,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-18-2021 09:00","01-18-2021 17:00");
+        Reservation reservation3 = new Reservation(
+                3,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-19-2021 09:00","01-19-2021 17:00");
 
         List<Reservation> reservationList =
                 new ArrayList<>(Arrays.asList(reservation1, reservation2,reservation3));
@@ -58,7 +48,7 @@ public class ScheduledReservationsTest {
         Mockito.when(repository.findAllReservationsByRoomId(anyInt()))
                 .thenReturn(reservationList);
 
-        List<Reservation> allReservations = service.getAllReservationsByRoomId(2);
+        List<Reservation> allReservations = service.getAllReservationsByRoomId(1);
 
         assertNotNull(allReservations);
         assertEquals(3,allReservations.size());
@@ -69,4 +59,32 @@ public class ScheduledReservationsTest {
         verify(repository,times(1)).findAllReservationsByRoomId(anyInt());
     }
 
+    @Test
+    public void emptyReservationsByRoomTest(){
+
+        Mockito.when(repository.findAllReservationsByRoomId(anyInt()))
+                .thenReturn(new ArrayList<>());
+        List<Reservation> allReservations = service.getAllReservationsByRoomId(any());
+        assertEquals(0,allReservations.size());
+    }
+
+    @Test
+    public void getReservationsByInvalidId(){
+        Reservation reservation1 = new Reservation(
+                1,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-17-2021 09:00","01-17-2021 17:00");
+        Reservation reservation2 = new Reservation(
+                2,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-18-2021 09:00","01-18-2021 17:00");
+
+        List<Reservation> reservationList =
+                new ArrayList<>(Arrays.asList(reservation1, reservation2));
+
+        Mockito.when(repository.findAllReservationsByRoomId(1))
+                .thenReturn(reservationList);
+
+        List<Reservation> allReservations = service.getAllReservationsByRoomId(2);
+        assertNull(allReservations);
+
+    }
 }
