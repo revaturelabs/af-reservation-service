@@ -31,6 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+
     @Override
     public List<Reservation> getAllReservations() {
         return null;
@@ -65,5 +66,10 @@ public class ReservationServiceImpl implements ReservationService {
 //		}
 		return false;
 	}
+
+	@Override
+    public List<Reservation> findTrainingStations(){
+        return null;
+    }
 
 }

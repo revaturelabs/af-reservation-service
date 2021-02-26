@@ -9,4 +9,6 @@ import java.util.List;
 public interface ReservationRepository extends CrudRepository<Reservation,Integer> {
 
     List<Reservation> findAllReservationsByRoomId(Integer roomId);
+
+    List<Reservation> findTrainingStations();
 }

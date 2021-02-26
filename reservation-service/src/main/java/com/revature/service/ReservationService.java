@@ -14,4 +14,5 @@ public interface ReservationService {
     void deleteReservation(Integer reservationId);
     void assignBatch(Integer reservationId, Integer batchId);
   	boolean isValidReservation(Reservation reservation);
+    List<Reservation> findTrainingStations();
 }
