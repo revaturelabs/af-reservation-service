@@ -38,21 +38,18 @@ public class TrainingStationReservationTest {
 
     @Before
     void before() {
-        Reservation reservation1 = new Reservation();
         reservation1.setReservationId(111);
         reservation1.setRoomType(VIRTUAL);
         reservation1.setReserver("Revature CEO");
         reservation1.setBuildingId(101);
         reservation1.setRoomId(101);
 
-        Reservation reservation2 = new Reservation();
         reservation2.setReservationId(112);
         reservation2.setRoomType(VIRTUAL);
         reservation2.setReserver("Revature CEO");
         reservation2.setBuildingId(101);
         reservation2.setRoomId(201);
 
-        Reservation meetingRoom = new Reservation();
         meetingRoom.setReservationId(113);
         meetingRoom.setRoomType(RoomType.PHYSICAL);
         meetingRoom.setReserver("Revature CEO");
