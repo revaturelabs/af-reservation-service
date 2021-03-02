@@ -82,7 +82,7 @@ public class TrainingStationReservationTest {
         reservationService.addReservation(reservation1);
         reservationService.addReservation(reservation2);
         reservationService.addReservation(meetingRoom);
-        Assert.assertEquals(2, reservationService.findTrainingStations().size());
+        Assert.assertEquals(2, reservationService.getTrainingStationReservations().size());
     }
 
     @Test
@@ -90,10 +90,10 @@ public class TrainingStationReservationTest {
         reservationService.addReservation(reservation1);
         reservationService.addReservation(reservation2);
         reservationService.addReservation(meetingRoom);
-        Assert.assertEquals(2, reservationService.findTrainingStations().size());
+        Assert.assertEquals(2, reservationService.getTrainingStationReservations().size());
 
         reservationService.deleteReservation(201);
-        Assert.assertEquals(1, reservationService.findTrainingStations().size());
+        Assert.assertEquals(1, reservationService.getTrainingStationReservations().size());
     }
 
     @Test

@@ -63,6 +63,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> findTrainingStations() {
         return repository.findAll().stream().filter(x -> x.getRoomType().equals("VIRTUAL")).collect(Collectors.toList());
+    public List<Reservation> getTrainingStationReservations() {
+        return null;
     }
 
     @Override

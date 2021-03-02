@@ -35,7 +35,7 @@ public class ReservationControllerTest {
         List<Reservation> trainingStations = new ArrayList<>();
         trainingStations.add(new Reservation());
         trainingStations.add(new Reservation());
-        when(reservationService.findTrainingStations()).thenReturn(trainingStations);
+        when(reservationService.getTrainingStationReservations()).thenReturn(trainingStations);
 
         mockMvc.perform(MockMvcRequestBuilders.get("trainingstations")
                 .contentType(MediaType.APPLICATION_JSON)
