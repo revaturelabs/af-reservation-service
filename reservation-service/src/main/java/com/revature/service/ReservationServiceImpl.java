@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -13,32 +14,35 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository repository;
 
     public ReservationServiceImpl(ReservationRepository repository) {
+
         this.repository = repository;
     }
 
     @Override
     public Reservation addReservation(Reservation reservation) {
-        return null;
+
+        return repository.save(reservation);
     }
 
     @Override
     public Reservation updateReservation(Reservation reservation) {
+
         return null;
     }
 
     @Override
     public void deleteReservation(Integer reservationId) {
-
+        repository.deleteById(reservationId);
     }
 
     @Override
     public List<Reservation> getAllReservations() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Reservation getReservationById(Integer reservationId) {
-        return null;
+        return repository.getOne(reservationId);
     }
 
     @Override
@@ -58,7 +62,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> findTrainingStations() {
-        return null;
+        return repository.findAll().stream().filter(x -> x.getRoomType().equals("VIRTUAL")).collect(Collectors.toList());
     }
 
     @Override

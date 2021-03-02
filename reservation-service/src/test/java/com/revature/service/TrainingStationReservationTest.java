@@ -3,12 +3,14 @@ package com.revature.service;
 import com.revature.model.Building;
 import com.revature.model.Reservation;
 import com.revature.model.RoomType;
+import com.revature.repository.ReservationRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,22 +24,26 @@ import static com.revature.model.RoomType.VIRTUAL;
 @DataJpaTest
 public class TrainingStationReservationTest {
 
-    @InjectMocks
-    private ReservationService reservationService;
+
+    private ReservationServiceImpl reservationService;
+
+    private ReservationRepository repository;
 
     @BeforeClass
     public static void beforeClass() {
-        Building b = new Building();
-        Map<String, Integer> amenities = new HashMap<>();
+
     }
 
-    Reservation reservation1;
-    Reservation reservation2;
-    Reservation meetingRoom;
+    public Reservation reservation1 = new Reservation();
+    public Reservation reservation2 = new Reservation();
+    public Reservation meetingRoom = new Reservation();
+
 
 
     @Before
-    void before() {
+    public void before() {
+        repository = Mockito.mock(ReservationRepository.class);
+        reservationService = new ReservationServiceImpl(repository);
         reservation1.setReservationId(111);
         reservation1.setRoomType(VIRTUAL);
         reservation1.setReserver("Revature CEO");
@@ -60,19 +66,19 @@ public class TrainingStationReservationTest {
 
 
     @Test
-    void addTrainingStation(){
+    public void addTrainingStation(){
         Reservation test = reservationService.addReservation(reservation1);
-        Assert.assertEquals(test,reservation1);
+        Assert.assertEquals(reservation1, test);
     }
 
     @Test
-    void GetTrainingStationById(){
+    public void GetTrainingStationById(){
         Reservation getRes = reservationService.getReservationById(111);
         Assert.assertEquals(getRes, reservation1);
     }
 
     @Test
-    void getAllTrainingStations(){
+    public void getAllTrainingStations(){
         reservationService.addReservation(reservation1);
         reservationService.addReservation(reservation2);
         reservationService.addReservation(meetingRoom);
@@ -80,7 +86,7 @@ public class TrainingStationReservationTest {
     }
 
     @Test
-    void deleteTrainingStationById(){
+    public void deleteTrainingStationById(){
         reservationService.addReservation(reservation1);
         reservationService.addReservation(reservation2);
         reservationService.addReservation(meetingRoom);
@@ -91,7 +97,7 @@ public class TrainingStationReservationTest {
     }
 
     @Test
-    void updateTrainingStation(){
+    public void updateTrainingStation(){
         reservationService.addReservation(reservation1);
         reservationService.addReservation(reservation2);
         Reservation test = reservationService.addReservation(reservation1);
