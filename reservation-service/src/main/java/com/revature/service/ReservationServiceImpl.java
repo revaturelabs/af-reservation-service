@@ -3,8 +3,6 @@ package com.revature.service;
 import com.revature.model.Reservation;
 import com.revature.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,7 +46,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> getAllReservationsByRoomId(Integer roomId) {
-        return null;
+        return repository.findAllReservationsByRoomId(roomId);
     }
 
     @Override
