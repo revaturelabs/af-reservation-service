@@ -72,29 +72,34 @@ public class ReservationServiceImpl implements ReservationService {
 	public boolean isValidReservation(Reservation reservation) {
 		
 		
-		//list for reservations
-		List<Reservation> reservations = new ArrayList<>();
-		
+		//list for reservations		
 		//populate list with all reservations with a matching room number
-		repository.findAllReservationsByRoomId(reservation.getRoomId()).forEach(
-				res -> reservations.add(res));
+		 List<Reservation> reservations = repository.findAllReservationsByRoomId( reservation.getRoomId() );
 
 		//for each reservation in the list of shared room numbers check to see if the reservations
 		//start date and end date fall conflict with any of the already listed reservations
 		for(Reservation res : reservations) {
 			
 			//reject if the proposed start date is before a listed start date, and the proposed
-			//end date is after the proposed start date or if the proposed start date is before 
-			//a listed end date and the proposed end date is after a listed end date or
-			// if the proposed start date and end date are in between a listed start and end dates
-			if( ( reservation.getStartDate() > res.getStartDate() && reservation.getEndDate() > 
-			res.getStartDate() ) || ( reservation.getStartDate() < res.getStartDate() && 
-					reservation.getEndDate() > res.getEndDate() ) || ( reservation.getStartDate() > 
-					res.getEndDate() && reservation.getEndDate() > res.getEndDate() ) ) {
+			//end date is after the proposed start date  
+			if(  reservation.getStartDate() > res.getStartDate() && 
+					reservation.getEndDate() > res.getStartDate()  ) {
 				
 				//reservation is invalid result is false
 				return false;
 
+			}
+			// or if the proposed start date is before a listed end date and the proposed end date 
+			// is after a listed end date
+			if( reservation.getStartDate() < res.getStartDate() && 
+					reservation.getEndDate() > res.getEndDate()  ) {
+				return false;
+			}
+			
+			// or if the proposed start date and end date are in between a listed start and end dates
+			if( reservation.getStartDate() > res.getEndDate() &&
+					reservation.getEndDate() > res.getEndDate() ) {
+				return false;
 			}
 		}
 		
