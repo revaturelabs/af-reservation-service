@@ -21,13 +21,13 @@ public class ReservationController {
     @GetMapping(path="/{reservationId}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Reservation> getReservationById(@PathVariable Integer reservationId){
         reservationService.getReservationById(reservationId);
-        return new ResponseEntity<Reservation>(HttpStatus.OK);
+        return new ResponseEntity<Reservation>(reservationService.getReservationById(reservationId),HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Reservation>> getAllReservations(){
         reservationService.getAllReservations();
-        return new ResponseEntity<List<Reservation>>(HttpStatus.OK);
+        return new ResponseEntity<List<Reservation>>(reservationService.getAllReservations(),HttpStatus.OK);
     }
 
     @GetMapping(path = "/rooms/{roomId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,6 +58,11 @@ public class ReservationController {
     public ResponseEntity<Void> assignBatch(@PathVariable Integer reservationId, @PathVariable Integer batchId){
         reservationService.assignBatch(reservationId, batchId);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/trainingstations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Reservation>> getTrainingStationReservations(){
+        return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
 
 }
