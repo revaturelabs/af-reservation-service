@@ -83,22 +83,22 @@ public class ReservationServiceImpl implements ReservationService {
 			//reject if the proposed start date is before a listed start date, and the proposed
 			//end date is after the proposed start date  
 			if(  reservation.getStartDate() > res.getStartDate() && 
-					reservation.getEndDate() > res.getStartDate()  ) {
+					reservation.getEndDate() < res.getStartDate()  ) {
 				
 				//reservation is invalid result is false
 				return false;
 
 			}
-			// or if the proposed start date is before a listed end date and the proposed end date 
-			// is after a listed end date
+			
+			// or if the proposed start date and end date are in between a listed start and end dates
 			if( reservation.getStartDate() < res.getStartDate() && 
 					reservation.getEndDate() > res.getEndDate()  ) {
 				return false;
 			}
-			
-			// or if the proposed start date and end date are in between a listed start and end dates
+			// or if the proposed start date is before a listed end date and the proposed end date 
+			// is after a listed end date
 			if( reservation.getStartDate() > res.getEndDate() &&
-					reservation.getEndDate() > res.getEndDate() ) {
+					reservation.getEndDate() < res.getEndDate() ) {
 				return false;
 			}
 		}
