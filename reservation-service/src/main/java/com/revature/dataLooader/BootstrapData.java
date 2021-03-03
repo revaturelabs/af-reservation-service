@@ -3,7 +3,6 @@ package com.revature.dataLooader;
 import com.revature.model.Reservation;
 import com.revature.model.RoomType;
 import com.revature.repository.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -30,7 +29,7 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("Environment Running: " + myValue);
+        System.out.println("Environment Running: " + myValue.toUpperCase());
 
         Reservation reservation1 = new Reservation(
                 9,1,1,1,1, RoomType.PHYSICAL,"Revature CEO",
