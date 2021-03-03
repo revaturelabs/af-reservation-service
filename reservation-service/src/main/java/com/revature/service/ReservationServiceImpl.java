@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import com.revature.model.Reservation;
+import com.revature.model.Room;
 import com.revature.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation addReservation(Reservation reservation) {
+
         return null;
     }
 
@@ -50,7 +52,10 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllAvailableRoomsByType(Integer BuildingId, String roomType) {
+    public List<Room> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate) {
+        // make request to locations service to get the list of rooms by building id
+        // from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
+        // filter the list further by room occupation (by meeting) and return the list of rooms
         return null;
     }
 

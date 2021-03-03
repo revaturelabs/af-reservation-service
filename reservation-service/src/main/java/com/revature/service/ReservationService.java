@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import com.revature.model.Reservation;
+import com.revature.model.Room;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface ReservationService {
     void deleteReservation(Integer reservationId);
     void assignBatch(Integer reservationId, Integer batchId);
   	boolean isValidReservation(Reservation reservation);
-    List<Reservation> getAllAvailableRoomsByType(Integer BuildingId, String roomType);
+    List<Room> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate);
     List<Reservation> getTrainingStationReservations();
 }
