@@ -62,7 +62,7 @@ public class TestCaliberIntegrations {
 		reservationController.assignBatch( reservation.getReservationId(), 101);
 		assertEquals(101, valueCapture.getValue());
 		
-		assertEquals(message, expected, reservation);
+		assertEquals(expected, reservation, message);
 	}
 	
 	@Test
@@ -87,6 +87,6 @@ public class TestCaliberIntegrations {
 		reservationController.assignBatch(reservation.getReservationId(), 102);
 		assertEquals(102, valueCapture.getValue());
 		
-		assertEquals(message, expected, reservation);
+		assertEquals(expected, reservation, message);
 	}
 }

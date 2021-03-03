@@ -62,9 +62,9 @@ public class ReservationController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "trainingstations", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reservation>> getTrainingStationReservations(@PathVariable Integer roomId){
-        return new ResponseEntity<List<Reservation>>(reservationService.HttpStatus.OK);
+    @GetMapping(path = "/trainingstations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Reservation>> getTrainingStationReservations(){
+        return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
 
 }
