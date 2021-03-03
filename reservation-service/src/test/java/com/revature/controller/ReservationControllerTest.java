@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,11 +32,11 @@ public class ReservationControllerTest {
     private ReservationServiceImpl reservationService;
 
     @Test
-    void getTrainingStations() throws Exception {
+    public void getTrainingStations() throws Exception {
         List<Reservation> trainingStations = new ArrayList<>();
         trainingStations.add(new Reservation());
         trainingStations.add(new Reservation());
-        when(reservationService.getTrainingStationReservations()).thenReturn(trainingStations);
+        doReturn(trainingStations).when(reservationService).getTrainingStationReservations();
 
         mockMvc.perform(MockMvcRequestBuilders.get("trainingstations")
                 .contentType(MediaType.APPLICATION_JSON)
