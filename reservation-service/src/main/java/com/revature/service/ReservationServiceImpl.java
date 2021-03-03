@@ -71,9 +71,6 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public boolean isValidReservation(Reservation reservation) {
 		
-		//create result value for neatness this method assumes the proposed reservation time is 
-		//valid
-		boolean result = true;
 		
 		//list for reservations
 		List<Reservation> reservations = new ArrayList<>();
@@ -96,12 +93,12 @@ public class ReservationServiceImpl implements ReservationService {
 					res.getEndDate() && reservation.getEndDate() > res.getEndDate() ) ) {
 				
 				//reservation is invalid result is false
-				result = false;
+				return false;
 
 			}
 		}
 		
-		return result;
+		return true;
 	}
 
 
