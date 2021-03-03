@@ -1,13 +1,20 @@
-
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
 
 *.class
-reservation-service/.classpath
-reservation-service/.project
+*.classpath
+*.project
 *.prefs
 *.MF
-reservation-service/target/classes/META-INF/maven/com.revature/reservation-service/pom.properties
-reservation-service/target/classes/application.properties
-.project
 /.metadata/
-.project
 message.txt
+
