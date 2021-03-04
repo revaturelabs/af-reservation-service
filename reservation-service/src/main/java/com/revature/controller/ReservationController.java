@@ -1,6 +1,7 @@
 package com.revature.controller;
 
 import com.revature.model.Reservation;
+import com.revature.model.Room;
 import com.revature.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,5 +65,13 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getTrainingStationReservations(){
         return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
+
+    @GetMapping(path="/{buildingId}/{startDate}/{endDate}")
+    public ResponseEntity<List<Room>> getAllAvailableMeetingRooms(@PathVariable Integer buildingId, @PathVariable String startDate, @PathVariable String endDate){
+        List<Room> availableMeetingRooms = reservationService.getAllAvailableMeetingRooms(buildingId, startDate, endDate);
+        return new ResponseEntity<>(availableMeetingRooms,HttpStatus.OK);
+
+    }
+
 
 }

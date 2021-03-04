@@ -33,6 +33,9 @@ public class Room {
         this.building = building;
     }
 
+    public Room(int i) {
+    }
+
     public int getId() {
         return id;
     }
