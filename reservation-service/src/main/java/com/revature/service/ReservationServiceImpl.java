@@ -16,12 +16,8 @@ import static com.revature.model.RoomType.VIRTUAL;
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
-<<<<<<< HEAD
     private final ReservationRepository repository;
     RestTemplate restTemplate = new RestTemplate();
-=======
-	private final ReservationRepository repository;
->>>>>>> main
 
 	public ReservationServiceImpl(ReservationRepository repository) {
 
