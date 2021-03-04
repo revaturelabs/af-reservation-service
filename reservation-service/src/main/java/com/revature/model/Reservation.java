@@ -1,5 +1,6 @@
 package com.revature.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -24,15 +25,16 @@ public class Reservation {
 
 	@Column(name = "start_date")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm", timezone="EST")
 	private Date startDate;
 
 	@Column(name = "end_date")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm", timezone = "EST")
 	private Date endDate;
 
 	@Transient
 	private final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-
 
 	public Reservation() {
 
