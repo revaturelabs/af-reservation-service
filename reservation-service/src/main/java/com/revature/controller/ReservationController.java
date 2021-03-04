@@ -21,8 +21,8 @@ public class ReservationController {
 
     @GetMapping(path="/{reservationId}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Reservation> getReservationById(@PathVariable Integer reservationId){
-        reservationService.getReservationById(reservationId);
-        return new ResponseEntity<Reservation>(reservationService.getReservationById(reservationId),HttpStatus.OK);
+         Reservation reservationById = reservationService.getReservationById(reservationId);
+         return new ResponseEntity<Reservation>(reservationById,HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
