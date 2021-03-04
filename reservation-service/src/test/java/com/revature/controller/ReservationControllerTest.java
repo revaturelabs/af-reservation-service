@@ -47,13 +47,20 @@ public class ReservationControllerTest {
     }
 
     @Test
-    public void getTrainingStations() throws Exception {
+    public void getTrainingStationReservations() throws Exception {
+        Reservation reservation1 = new Reservation(
+                1,1,1,1,1, RoomType.VIRTUAL,"Revature CEO",
+                "01-17-2021 09:00","01-17-2021 17:00");
+        Reservation reservation2 = new Reservation(
+                2,1,1,1,1,RoomType.VIRTUAL,"Revature CEO",
+                "01-18-2021 09:00","01-18-2021 17:00");
+
         List<Reservation> trainingStations = new ArrayList<>();
-        trainingStations.add(new Reservation());
-        trainingStations.add(new Reservation());
+        trainingStations.add(reservation1);
+        trainingStations.add(reservation2);
         doReturn(trainingStations).when(reservationService).getTrainingStationReservations();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("trainingstations")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/reservations/trainingstations")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(jsonPath("$", hasSize(2))).andDo(print());
     }
