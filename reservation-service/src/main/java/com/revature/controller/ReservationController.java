@@ -66,8 +66,8 @@ public class ReservationController {
         return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
 
-    @GetMapping(path="/{buildingId}/{startDate}/{endDate}")
-    public ResponseEntity<List<Room>> getAllAvailableMeetingRooms(@PathVariable Integer buildingId, @PathVariable String startDate, @PathVariable String endDate){
+    @GetMapping(path="/{buildingId}/meetingrooms")
+    public ResponseEntity<List<Room>> getAllAvailableMeetingRooms(@PathVariable Integer buildingId, @RequestParam String startDate, @RequestParam String endDate){
         List<Room> availableMeetingRooms = reservationService.getAllAvailableMeetingRooms(buildingId, startDate, endDate);
         return new ResponseEntity<>(availableMeetingRooms,HttpStatus.OK);
 

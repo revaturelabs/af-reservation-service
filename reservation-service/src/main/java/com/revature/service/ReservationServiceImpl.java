@@ -2,6 +2,7 @@ package com.revature.service;
 
 import com.revature.model.Reservation;
 import com.revature.model.Room;
+import com.revature.model.RoomDto;
 import com.revature.repository.ReservationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,15 +64,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Room> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate) {
-        // make request to locations service to get the list of rooms by building id
-        // from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
-        // filter the list further by room occupation (by meeting) and return the list of rooms
+		// make request to locations service to get the list of rooms by building id
+		// from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
+		// filter the list further by room occupation (by meeting) and return the list of rooms
 
-        String locationServiceUrl = "http://localhost:8080/api/location/rooms";
-        URI uri = URI.create(locationServiceUrl + BuildingId);
-        ResponseEntity rooms = restTemplate.getForEntity(uri, Object.class);
+		String locationServiceUrl = "http://localhost:8080/api/location/rooms";
+		URI uri = URI.create(locationServiceUrl + BuildingId);
+		ResponseEntity<RoomDto[]> allRooms = restTemplate.getForEntity(uri, RoomDto[].class);
+		RoomDto[] body = allRooms.getBody();
 
-        //for (int i = 0; i <)
+		//for (int i = 0; i < )
+			//list for reservations
+			//populate list with all reservations with a matching room number
+			List<Reservation> reservations = repository.findAllReservationsByRoomId();
 
         return null;
     }
