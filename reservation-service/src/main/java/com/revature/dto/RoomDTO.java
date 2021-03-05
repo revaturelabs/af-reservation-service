@@ -1,8 +1,12 @@
-package com.revature.model;
+package com.revature.dto;
+
+import com.revature.model.Building;
+import com.revature.model.RoomOccupation;
+import com.revature.model.RoomType;
 
 import java.util.Map;
 
-public class Room {
+public class RoomDTO {
     //copy the room fields from location team later
     private int id;
     private String name;
@@ -13,25 +17,6 @@ public class Room {
     private Map<String, Integer> roomAmenities;
     private int floorNumber;
 
-    public Room(int id, String name, RoomType type, RoomOccupation occupation, int capacity, Building building, Map<String, Integer> roomAmenities, int floorNumber) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.occupation = occupation;
-        this.capacity = capacity;
-        this.building = building;
-        this.roomAmenities = roomAmenities;
-        this.floorNumber = floorNumber;
-    }
-
-    public Room(int id, String name, RoomType type, RoomOccupation occupation, int capacity, Building building) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.occupation = occupation;
-        this.capacity = capacity;
-        this.building = building;
-    }
 
     public int getId() {
         return id;
@@ -97,3 +82,4 @@ public class Room {
         this.floorNumber = floorNumber;
     }
 }
+

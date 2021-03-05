@@ -1,8 +1,9 @@
 package com.revature.service;
 
+import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 import com.revature.model.Room;
-import com.revature.model.RoomDto;
+import com.revature.model.RoomOccupation;
 import com.revature.repository.ReservationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -29,6 +29,9 @@ public class ReservationServiceImpl implements ReservationService {
     
     @Value("${revature.caliberUrl}")
     private String caliberUrl;
+
+	@Value("${locationServiceUrl}")
+	private String locationServiceUrl;
     
     private RestTemplate restTemplate;
     
@@ -103,7 +106,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public List<Room> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate) {
+    public List<Room> getAllAvailableMeetingRooms( Integer BuildingId, String startDate, String endDate ) {
 		// make request to locations service to get the list of rooms by building id
 		// from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
 		// filter the list further by room occupation (by meeting) and return the list of rooms
@@ -111,48 +114,45 @@ public class ReservationServiceImpl implements ReservationService {
 		Date endDt = new Date();
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-			startDt = formatter.parse(startDate);
-			endDt = formatter.parse(endDate);
+			startDt = formatter.parse( startDate );
+			endDt = formatter.parse( endDate );
 		}catch ( ParseException e ) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		String locationServiceUrl = "http://localhost:8080/api/location/rooms";
-		URI uri = URI.create(locationServiceUrl + BuildingId);
-		ResponseEntity<RoomDto[]> getAllRooms = restTemplate.getForEntity(uri, RoomDto[].class);
-		RoomDto[] rooms = getAllRooms.getBody();
+		//String locationServiceUrl = "http://localhost:8080/api/location/rooms";
+		URI uri = URI.create( locationServiceUrl + BuildingId );
+		ResponseEntity<RoomDTO[]> getAllRooms = restTemplate.getForEntity(uri, RoomDTO[].class);
+		RoomDTO[] rooms = getAllRooms.getBody();
 
 		int[] unavailableRooms = new int[rooms.length];
 		int j = 0;
 
-		for (int i = 0; i < rooms.length ; ++i ) {
+		for ( int i = 0; i < rooms.length ; ++i ) {
 
 			//populate list with all reservations with a matching room number
-			List<Reservation> reservations = repository.findAllReservationsByRoomId(1)
+			List<Reservation> reservations = repository.findAllReservationsByRoomId( rooms[i].getId() )
 														.stream()
 														.filter(x -> x.getRoomType().toString()
-														.equals("PHYSICAL"))
-														.collect(Collectors.toList());
+														.equals("PHYSICAL") )
+														.collect( Collectors.toList() );
 
 
 			for( Reservation res : reservations ) {
-				// Checking room type is "PHYSICAL" for meeting room
-//				if( res.getRoomType().toString() == "PHYSICAL" ) {
 					// check start date & end date with i/p parameters
-					if( (res.getStartDate().before( startDt ) && res.getEndDate().after( startDt )) ||
-							(res.getStartDate().before( endDt ) && res.getEndDate().after( endDt ))) {
+					if( ( res.getStartDate().before( startDt ) && res.getEndDate().after( startDt )) ||
+							( res.getStartDate().before( endDt ) && res.getEndDate().after( endDt ))) {
 						unavailableRooms[j] = res.getRoomId();
 						j = j + 1;
 					}
-//				}
 			}
 		}
 
-		for (int i = 0; i < rooms.length ; ++i ) {
-			for (int k = 0; k < j ; ++k ) {
-				// check rooms[i] = unavailableRooms[k]
-				if( i == unavailableRooms[k]){
+		for ( int i = 0; i < rooms.length ; ++i ) {
+			for ( int k = 0; k < j ; ++k ) {
+				// check rooms[i].getId() = unavailableRooms[k]
+				if( rooms[i].getId() == unavailableRooms[k] ){
 					//remove that rooms[i]
 				}
 			}

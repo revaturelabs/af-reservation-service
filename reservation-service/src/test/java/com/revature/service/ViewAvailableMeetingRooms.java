@@ -1,6 +1,6 @@
 package com.revature.service;
 
-import com.revature.controller.ReservationController;
+import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 import com.revature.model.Room;
 import com.revature.model.RoomType;
@@ -8,55 +8,64 @@ import com.revature.repository.ReservationRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ViewAvailableMeetingRooms {
 
-    @Mock
-    private ReservationService service;
-    ReservationController controller;
+    private Reservation reservation;
+
+    @MockBean
+    private ReservationRepository repository;
+
+    @MockBean
+    private RestTemplate restTemplate;
+
+    @InjectMocks
+    @Autowired
+    private ReservationServiceImpl reservationService;
+
+    private RoomDTO rooms;
 
     @Before
-    public void preTest() {
-        MockitoAnnotations.openMocks(this);
-        controller = new ReservationController(service);
+    public void setUp() throws Exception {
+
+        reservation = new Reservation( 1, 1, 1, 1,
+                RoomType.PHYSICAL,
+                "JUnit Test",
+                "02-02-2021 00:00",
+                "02-02-2021 01:00" );
+
+        reservationService.setRestTemplate(restTemplate);
+        //batch = new BatchDTO(101, "TR-1201", "Mock Batch 101", "2021-12-03","2022-02-11");
     }
 
     @Test
     public void viewAvailableRoomsByRoomTypeTest(){
 
-//        Room room1 = new Room(101);
-//        Room room2 = new Room(102);
-//        Room room3 = new Room(103);
+//        Reservation expected = new Reservation( 1, 101, 1, 1, 1,
+//                RoomType.PHYSICAL,
+//                "JUnit Test",
+//                "02-02-2021 00:00",
+//                "02-02-2021 01:00" );
 //
-//        List<Room> roomList = new ArrayList<>(Arrays.asList( room1, room2, room3));
+//        String message = "Test to try to add a batch to the reservation when the reservation " +
+//                "already has a batch";
 //
-//        Mockito.when(service.getAllAvailableMeetingRooms(anyInt(),"11-22-1999 11:30","11-23-1999 11:30")).thenReturn(roomList);
+//        Mockito.when( restTemplate.getForObject( Mockito.anyString(),
+//                Mockito.eq(RoomDTO.class) ))
+//                .thenReturn( rooms );
 //
-//        ResponseEntity<List<Room>> listResponseEntity = controller.getAllAvailableMeetingRooms(1, "start", "end");
-//        List<Room> body = listResponseEntity.getBody();
+//        reservationService.assignBatch( reservation.getReservationId(), 101);
 //
-//        System.out.println(body);
-
-
-
-
+//        assertEquals(message, expected, savedReservation.getValue());
     }
 
 }
