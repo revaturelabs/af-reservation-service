@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,7 @@ import static com.revature.model.RoomType.VIRTUAL;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository repository;
+
     RestTemplate restTemplate = new RestTemplate();
 
 	public ReservationServiceImpl(ReservationRepository repository) {
@@ -67,17 +71,57 @@ public class ReservationServiceImpl implements ReservationService {
 		// make request to locations service to get the list of rooms by building id
 		// from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
 		// filter the list further by room occupation (by meeting) and return the list of rooms
+		Date startDt = new Date();
+		Date endDt = new Date();
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+			startDt = formatter.parse(startDate);
+			endDt = formatter.parse(endDate);
+		}catch ( ParseException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		String locationServiceUrl = "http://localhost:8080/api/location/rooms";
 		URI uri = URI.create(locationServiceUrl + BuildingId);
-		ResponseEntity<RoomDto[]> allRooms = restTemplate.getForEntity(uri, RoomDto[].class);
-		RoomDto[] body = allRooms.getBody();
+		ResponseEntity<RoomDto[]> getAllRooms = restTemplate.getForEntity(uri, RoomDto[].class);
+		RoomDto[] rooms = getAllRooms.getBody();
 
-		//for (int i = 0; i < )
-			//list for reservations
+		int[] unavailableRooms = new int[rooms.length];
+		int j = 0;
+
+		for (int i = 0; i < rooms.length ; ++i ) {
+
 			//populate list with all reservations with a matching room number
-			List<Reservation> reservations = repository.findAllReservationsByRoomId();
+			List<Reservation> reservations = repository.findAllReservationsByRoomId(1)
+														.stream()
+														.filter(x -> x.getRoomType().toString()
+														.equals("PHYSICAL"))
+														.collect(Collectors.toList());
 
+
+			for( Reservation res : reservations ) {
+				// Checking room type is "PHYSICAL" for meeting room
+//				if( res.getRoomType().toString() == "PHYSICAL" ) {
+					// check start date & end date with i/p parameters
+					if( (res.getStartDate().before( startDt ) && res.getEndDate().after( startDt )) ||
+							(res.getStartDate().before( endDt ) && res.getEndDate().after( endDt ))) {
+						unavailableRooms[j] = res.getRoomId();
+						j = j + 1;
+					}
+//				}
+			}
+		}
+
+		for (int i = 0; i < rooms.length ; ++i ) {
+			for (int k = 0; k < j ; ++k ) {
+				// check rooms[i] = unavailableRooms[k]
+				if( i == unavailableRooms[k]){
+					//remove that rooms[i]
+				}
+			}
+		}
+		//return rooms
         return null;
     }
 
