@@ -3,52 +3,93 @@ package com.revature.service;
 import com.revature.model.Reservation;
 import com.revature.model.Room;
 import com.revature.repository.ReservationRepository;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static com.revature.model.RoomType.VIRTUAL;
 
+import com.revature.dto.BatchDTO;
+
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
-	private final ReservationRepository repository;
 
-	public ReservationServiceImpl(ReservationRepository repository) {
+    private final ReservationRepository repository;
+    
+    @Value("${revature.caliberUrl}")
+    private String caliberUrl;
+    
+    private RestTemplate restTemplate;
+    
+    public ReservationServiceImpl( ReservationRepository repository ) {
+        this.repository = repository;
+    }
 
-		this.repository = repository;
+    public RestTemplate getRestTemplate() {
+		return restTemplate;
+	}
+
+	public void setRestTemplate( RestTemplate restTemplate ) {
+		this.restTemplate = restTemplate;
 	}
 
 	@Override
-	public Reservation addReservation(Reservation reservation) {
-		return repository.save(reservation);
-	}
+    public Reservation addReservation( Reservation reservation ) {
+        return repository.save( reservation );
+    }
 
-	@Override
-	public Reservation updateReservation(Reservation reservation) {
+    @Override
+    public Reservation updateReservation( Reservation reservation ) {
+        return null;
+    }
 
-		return null;
-	}
-
-	@Override
-	public void deleteReservation(Integer reservationId) {
-		repository.deleteById(reservationId);
-	}
+    @Override
+    public void deleteReservation( Integer reservationId ) {
+        repository.deleteById( reservationId );
+    }
 
 	@Override
 	public List<Reservation> getAllReservations() {
 		return repository.findAll();
 	}
 
-	@Override
-	public Reservation getReservationById(Integer reservationId) {
-		return repository.getOne(reservationId);
-	}
+    @Override
+    public Reservation getReservationById( Integer reservationId ) {
+        return repository.getOne( reservationId );
+    }
 
-	@Override
-	public void assignBatch(Integer reservationId, Integer batchId) {
+    @Override
+    public void assignBatch( Integer reservationId, Integer batchId ) throws NoSuchElementException, 
+    																	IllegalArgumentException {
+    	
+    	Reservation reservation = repository.findById( reservationId ).get();
+    	
+    	if( reservation.getBatchId() != null ) {
+    		// throw exception
+    		return;
+    	}
+    	
+    	// Can throw IllegalArgumentException / 500 http Status code
+    	// but pass the exception to the calling method
+		BatchDTO batchDto = restTemplate.getForObject(caliberUrl + 
+									    				"batch/" + 
+									    				batchId, 
+									    				BatchDTO.class);
+		
+		batchDto.formatDate();
+		
+    	// Validate dates
+		
+    	reservation.setBatchId(batchId);
+    	repository.save(reservation);
+    }
 
-	}
 
 	@Override
 	public List<Reservation> getAllReservationsByRoomId(Integer roomId) {
