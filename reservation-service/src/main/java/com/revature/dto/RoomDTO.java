@@ -17,6 +17,9 @@ public class RoomDTO {
     private Map<String, Integer> roomAmenities;
     private int floorNumber;
 
+    public RoomDTO() {
+    }
+
 
     public int getId() {
         return id;
@@ -80,6 +83,20 @@ public class RoomDTO {
 
     public void setFloorNumber(int floorNumber) {
         this.floorNumber = floorNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", occupation=" + occupation +
+                ", capacity=" + capacity +
+                ", building=" + building +
+                ", roomAmenities=" + roomAmenities +
+                ", floorNumber=" + floorNumber +
+                '}';
     }
 }
 

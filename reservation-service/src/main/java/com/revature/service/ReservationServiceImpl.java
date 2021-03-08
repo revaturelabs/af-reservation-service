@@ -4,23 +4,26 @@ import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 import com.revature.model.Room;
 import com.revature.model.RoomOccupation;
+import com.revature.model.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.revature.model.RoomType.VIRTUAL;
+import static com.revature.model.RoomType.*;
 
 import com.revature.dto.BatchDTO;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -106,59 +109,84 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public List<Room> getAllAvailableMeetingRooms( Integer BuildingId, String startDate, String endDate ) {
+    public List<RoomDTO> getAllAvailableMeetingRooms( Integer BuildingId, String startDate, String endDate ) {
 		// make request to locations service to get the list of rooms by building id
 		// from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
 		// filter the list further by room occupation (by meeting) and return the list of rooms
-		Date startDt = new Date();
-		Date endDt = new Date();
+
+		Map<String,Date> dates = new HashMap<>();
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-			startDt = formatter.parse( startDate );
-			endDt = formatter.parse( endDate );
+			dates.put("startDate",formatter.parse( startDate )); //for start date
+			dates.put("endDate", formatter.parse( endDate )); //for end date
 		}catch ( ParseException e ) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		//String locationServiceUrl = "http://localhost:8080/api/location/rooms";
-		URI uri = URI.create( locationServiceUrl + BuildingId );
-		ResponseEntity<RoomDTO[]> getAllRooms = restTemplate.getForEntity(uri, RoomDTO[].class);
-		RoomDTO[] rooms = getAllRooms.getBody();
 
-		int[] unavailableRooms = new int[rooms.length];
-		int j = 0;
+		UriComponentsBuilder uriBuilder =UriComponentsBuilder.fromUriString(
+				"http://localhost:8080/api/location/rooms/"
+		)
+				.path(String.valueOf(BuildingId));
+	//	URI uri = URI.create( locationServiceUrl + BuildingId );
 
-		for ( int i = 0; i < rooms.length ; ++i ) {
+		ResponseEntity<RoomDTO[]> responseEntity = restTemplate.getForEntity(uriBuilder.toUriString(), RoomDTO[].class);
+
+
+		List<RoomDTO> rooms = Arrays.stream(responseEntity.getBody()).filter(roomDTO -> roomDTO.getOccupation() == RoomOccupation.MEETING).collect(Collectors.toList());
+
+		List<Integer> unavailableRoomIds = new ArrayList<>();
+
+		for ( int i = 0; i < rooms.size() ; ++i ) {
 
 			//populate list with all reservations with a matching room number
-			List<Reservation> reservations = repository.findAllReservationsByRoomId( rooms[i].getId() )
-														.stream()
-														.filter(x -> x.getRoomType().toString()
-														.equals("PHYSICAL") )
-														.collect( Collectors.toList() );
+			List<Reservation> reservations = repository.findAllReservationsByRoomId(rooms.get(i).getId())
+					.stream()
+					.filter(x -> x.getRoomType() == PHYSICAL)
+					.collect(Collectors.toList());
 
-
-			for( Reservation res : reservations ) {
-					// check start date & end date with i/p parameters
-					if( ( res.getStartDate().before( startDt ) && res.getEndDate().after( startDt )) ||
-							( res.getStartDate().before( endDt ) && res.getEndDate().after( endDt ))) {
-						unavailableRooms[j] = res.getRoomId();
-						j = j + 1;
-					}
-			}
-		}
-
-		for ( int i = 0; i < rooms.length ; ++i ) {
-			for ( int k = 0; k < j ; ++k ) {
-				// check rooms[i].getId() = unavailableRooms[k]
-				if( rooms[i].getId() == unavailableRooms[k] ){
-					//remove that rooms[i]
+			for (int j = 0; j < reservations.size(); j++) {
+				if(reservations.get(j).getStartDate().after(dates.get("startDate")) && reservations.get(j).getStartDate().before(dates.get("endDate"))) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
 				}
+				if (reservations.get(j).getEndDate().after(dates.get("startDate")) && reservations.get(j).getEndDate().before(dates.get("endDate"))) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
+				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) || reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
+
+
+//				if ((reservations.get(j).getStartDate().before(dates.get("startDate")) &&
+//						reservations.get(j).getEndDate().after(dates.get("startDate"))) ||
+//						(reservations.get(j).getStartDate().before(dates.get("endDate")) &&
+//								reservations.get(j).getEndDate().after(dates.get("endDate")))) {
+//
+//					unavailableRoomIds.add(reservations.get(j).getRoomId());
+//
+//				}
+			}
+
+		}
+		int roomSize = rooms.size();
+		for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
+			if( rooms.contains(rooms.get(unavailableRoomIds.get(k)))){
+				rooms.remove(unavailableRoomIds.get(k));
 			}
 		}
-		//return rooms
-        return null;
+
+//		for ( int i = 0; i < roomSize ; ++i ) {
+//			for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
+//				if( rooms.get(i).getId() == unavailableRoomIds.get(k)){
+//
+//					rooms.remove(i);
+//
+//				}
+//			}
+//		}
+        return rooms;
     }
 
 

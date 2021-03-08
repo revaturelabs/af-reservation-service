@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 import com.revature.model.Room;
 
@@ -15,6 +16,6 @@ public interface ReservationService {
     void deleteReservation(Integer reservationId);
     void assignBatch(Integer reservationId, Integer batchId);
   	boolean isValidReservation(Reservation reservation);
-    List<Room> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate);
+    List<RoomDTO> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate);
     List<Reservation> getTrainingStationReservations();
 }
