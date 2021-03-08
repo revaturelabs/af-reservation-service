@@ -110,9 +110,11 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public List<RoomDTO> getAllAvailableMeetingRooms( Integer BuildingId, String startDate, String endDate ) {
+    public List<RoomDTO> getAllAvailableMeetingRooms( Integer BuildingId, String startDate, 
+    		String endDate ) {
 		// make request to locations service to get the list of rooms by building id
-		// from the list, extract all the rooms that have not been reserved yet in a specific time frame, filter by startDate and endDate
+		// from the list, extract all the rooms that have not been reserved yet in a specific time 
+    	//frame, filter by startDate and endDate
 		// filter the list further by room occupation (by meeting) and return the list of rooms
 
 		Map<String,Date> dates = new HashMap<>();
@@ -133,10 +135,12 @@ public class ReservationServiceImpl implements ReservationService {
 				.path(String.valueOf(BuildingId));
 	//	URI uri = URI.create( locationServiceUrl + BuildingId );
 
-		ResponseEntity<RoomDTO[]> responseEntity = restTemplate.getForEntity(uriBuilder.toUriString(), RoomDTO[].class);
+		ResponseEntity<RoomDTO[]> responseEntity = restTemplate.getForEntity( 
+				uriBuilder.toUriString(), RoomDTO[].class );
 
 
-		List<RoomDTO> rooms = Arrays.stream(responseEntity.getBody()).filter(roomDTO -> roomDTO.getOccupation() == RoomOccupation.MEETING).collect(Collectors.toList());
+		List<RoomDTO> rooms = Arrays.stream(responseEntity.getBody()).filter(roomDTO -> 
+		roomDTO.getOccupation() == RoomOccupation.MEETING).collect(Collectors.toList());
 
 		List<Integer> unavailableRoomIds = new ArrayList<>();
 
@@ -149,13 +153,16 @@ public class ReservationServiceImpl implements ReservationService {
 					.collect(Collectors.toList());
 
 			for (int j = 0; j < reservations.size(); j++) {
-				if(reservations.get(j).getStartDate().after(dates.get("startDate")) && reservations.get(j).getStartDate().before(dates.get("endDate"))) {
+				if(reservations.get(j).getStartDate().after(dates.get("startDate")) &&
+						reservations.get(j).getStartDate().before(dates.get("endDate"))) {
 					unavailableRoomIds.add(reservations.get(j).getRoomId());
 				}
-				if (reservations.get(j).getEndDate().after(dates.get("startDate")) && reservations.get(j).getEndDate().before(dates.get("endDate"))) {
+				if (reservations.get(j).getEndDate().after(dates.get("startDate")) && 
+						reservations.get(j).getEndDate().before(dates.get("endDate"))) {
 					unavailableRoomIds.add(reservations.get(j).getRoomId());
 				}
-				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) || reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
+				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) || 
+						reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
 					unavailableRoomIds.add(reservations.get(j).getRoomId());
 				}
 
@@ -171,29 +178,35 @@ public class ReservationServiceImpl implements ReservationService {
 			}
 
 		}
-		int roomSize = rooms.size();
-		for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
-			if( rooms.contains(rooms.get(unavailableRoomIds.get(k)))){
-				rooms.remove(unavailableRoomIds.get(k));
-			}
-		}
-
-//		for ( int i = 0; i < roomSize ; ++i ) {
-//			for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
-//				if( rooms.get(i).getId() == unavailableRoomIds.get(k)){
-//
-//					rooms.remove(i);
-//
-//				}
+		ArrayList<RoomDTO> toBeRemoved = new ArrayList<RoomDTO>();
+//		for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
+//			if( rooms.contains(rooms.get(unavailableRoomIds.get(k)))){
+//				rooms.remove(unavailableRoomIds.get(k));
 //			}
 //		}
+
+		
+		for ( int i = 0; i < rooms.size() ; ++i ) {
+			for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
+				if( rooms.get(i).getId() == unavailableRoomIds.get(k)){
+					//add to the list for removal from list to be returned
+					toBeRemoved.add( rooms.get( i ) );
+//					rooms.remove(i);
+
+				}
+			}
+		}
+		for(RoomDTO i : toBeRemoved) {
+			rooms.remove(i);
+		}
         return rooms;
     }
 
 
 	@Override
 	public List<Reservation> getTrainingStationReservations() {
-		return repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+		return repository.findAll().stream().filter(x -> 
+		x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -202,7 +215,8 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		//list for reservations		
 		//populate list with all reservations with a matching room number
-		 List<Reservation> reservations = repository.findAllReservationsByRoomId( reservation.getRoomId() );
+		 List<Reservation> reservations = repository.findAllReservationsByRoomId( 
+				 reservation.getRoomId() );
 
 		//for each reservation in the list of shared room numbers check to see if the reservations
 		//start date and end date fall conflict with any of the already listed reservations
@@ -218,7 +232,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 			}
 			
-			// or if the proposed start date and end date are in between a listed start and end dates
+			//or if the proposed start date and end date are in between a listed start and end dates
 			if( reservation.getStartDate().after(res.getStartDate() )   && 
 					reservation.getEndDate().before(res.getEndDate() )  ) {
 				return false;
