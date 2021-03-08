@@ -57,7 +57,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation updateReservation( Reservation reservation ) {
-        return null;
+        deleteReservation( reservation.getReservationId() );
+        return addReservation( reservation );
     }
 
     @Override
@@ -226,6 +227,13 @@ public class ReservationServiceImpl implements ReservationService {
 			// is after a listed end date
 			if( reservation.getStartDate().before(res.getEndDate()) &&
 					reservation.getEndDate().after( res.getEndDate() ) ) {
+				return false;
+			}
+			// or if the proposed start date and end date match 
+			if( reservation.getStartDate().equals( res.getStartDate() ) ||
+					reservation.getEndDate().equals( res.getEndDate() ) ) {
+				
+				//fail schedule conflicts
 				return false;
 			}
 		}
