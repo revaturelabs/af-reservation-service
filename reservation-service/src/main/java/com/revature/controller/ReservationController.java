@@ -2,12 +2,15 @@ package com.revature.controller;
 
 import com.revature.model.Reservation;
 import com.revature.service.ReservationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Api("Reservations Controller")
 @RestController
 @RequestMapping(path="/api/reservations")
 public class ReservationController {
@@ -30,6 +33,7 @@ public class ReservationController {
         return new ResponseEntity<List<Reservation>>(reservationService.getAllReservations(),HttpStatus.OK);
     }
 
+    @ApiOperation(value = "List of Reservations by Room Id", notes = "This controller returns a list of reservation objects")
     @GetMapping(path = "/rooms/{roomId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Reservation>> getAllReservationsByRoomId(@PathVariable Integer roomId){
         List<Reservation> allReservations = reservationService.getAllReservationsByRoomId(roomId);
