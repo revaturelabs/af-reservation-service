@@ -6,6 +6,7 @@ import com.revature.model.Room;
 import com.revature.model.RoomOccupation;
 import com.revature.model.RoomType;
 import com.revature.repository.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Value("${revature.caliberUrl}")
     private String caliberUrl;
 
-	@Value("${locationServiceUrl}")
+	@Value("{revature.locationServiceUrl}")
 	private String locationServiceUrl;
     
     private RestTemplate restTemplate;
@@ -41,7 +42,6 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationServiceImpl( ReservationRepository repository ) {
         this.repository = repository;
     }
-
     public RestTemplate getRestTemplate() {
 		return restTemplate;
 	}
@@ -130,7 +130,7 @@ public class ReservationServiceImpl implements ReservationService {
 		//String locationServiceUrl = "http://localhost:8080/api/location/rooms";
 
 		UriComponentsBuilder uriBuilder =UriComponentsBuilder.fromUriString(
-				"http://localhost:8080/api/location/rooms/"
+				locationServiceUrl
 		)
 				.path(String.valueOf(BuildingId));
 	//	URI uri = URI.create( locationServiceUrl + BuildingId );
