@@ -2,7 +2,6 @@ package com.revature.service;
 
 import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
-import com.revature.model.Room;
 
 import java.util.List;
 

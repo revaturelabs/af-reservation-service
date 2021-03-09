@@ -1,102 +1,25 @@
 package com.revature.dto;
-
-import com.revature.model.Building;
-import com.revature.model.RoomOccupation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomOccupation;
+import com.revature.util.RoomType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Map;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class RoomDTO {
-    //copy the room fields from location team later
     private int id;
-    private String name;
-    private RoomType type;
-    private RoomOccupation occupation;
-    private int capacity;
-    private Building building;
-    private Map<String, Integer> roomAmenities;
-    private int floorNumber;
+    private String type;
+    private String occupation;
+//    private RoomType type;
+//    private RoomOccupation occupation;
+//    private int capacity;
+//
+//    private int floorNumber;
 
-    public RoomDTO() {
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public RoomType getType() {
-        return type;
-    }
-
-    public void setType(RoomType type) {
-        this.type = type;
-    }
-
-    public RoomOccupation getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(RoomOccupation occupation) {
-        this.occupation = occupation;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-
-    public Map<String, Integer> getRoomAmenities() {
-        return roomAmenities;
-    }
-
-    public void setRoomAmenities(Map<String, Integer> roomAmenities) {
-        this.roomAmenities = roomAmenities;
-    }
-
-    public int getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(int floorNumber) {
-        this.floorNumber = floorNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "RoomDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", occupation=" + occupation +
-                ", capacity=" + capacity +
-                ", building=" + building +
-                ", roomAmenities=" + roomAmenities +
-                ", floorNumber=" + floorNumber +
-                '}';
-    }
 }
-

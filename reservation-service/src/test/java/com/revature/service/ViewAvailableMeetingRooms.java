@@ -1,12 +1,10 @@
 package com.revature.service;
-
-import com.revature.dto.BatchDTO;
 import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
-import com.revature.model.Room;
-import com.revature.model.RoomOccupation;
-import com.revature.model.RoomType;
+
 import com.revature.repository.ReservationRepository;
+
+import com.revature.util.RoomType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,13 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -59,31 +55,19 @@ public class ViewAvailableMeetingRooms {
     public void viewAvailableRoomsByRoomTypeTest(){
 
         RoomDTO room1 = new RoomDTO();
-        room1.setId ( 1 );
-      //  room1.setBuilding ( testBuilding1 );
-        room1.setCapacity ( 20 );
-        room1.setName ( "PHYSICAL MEETING 1" );
-        room1.setOccupation ( RoomOccupation.MEETING );
-        room1.setFloorNumber ( 1 );
-        room1.setType ( RoomType.PHYSICAL );
+        room1.setId(1);
+        room1.setType("PHYSICAL");
+        room1.setOccupation("MEETING");
 
         RoomDTO room2 = new RoomDTO();
-        room2.setId ( 2 );
-      //  room1.setBuilding ( testBuilding1 );
-        room2.setCapacity ( 20 );
-        room2.setName ( "PHYSICAL MEETING 2" );
-        room2.setOccupation ( RoomOccupation.MEETING );
-        room2.setFloorNumber ( 1 );
-        room2.setType ( RoomType.PHYSICAL );
+        room2.setId(2);
+        room2.setType("PHYSICAL");
+        room2.setOccupation("MEETING");
 
         RoomDTO room3 = new RoomDTO();
-        room3.setId ( 3 );
-        //  room1.setBuilding ( testBuilding1 );
-        room3.setCapacity ( 20 );
-        room3.setName ( "PHYSICAL MEETING 3" );
-        room3.setOccupation ( RoomOccupation.MEETING );
-        room3.setFloorNumber ( 1 );
-        room3.setType ( RoomType.PHYSICAL );
+        room3.setId(3);
+        room3.setType("PHYSICAL");
+        room3.setOccupation("MEETING");
 
         Reservation r1 = new Reservation(1,1,1,1,1,RoomType.PHYSICAL,"Reserver",
                 "01-17-2021 07:00","01-17-2021 10:00");
@@ -108,9 +92,8 @@ public class ViewAvailableMeetingRooms {
 
         List<RoomDTO> availableRooms = reservationService.getAllAvailableMeetingRooms( 1,"01-17-2021 09:00","01-17-2021 09:30" );
 
-
-        System.out.println(availableRooms);
-        System.out.println(availableRooms.size());
+//        System.out.println(availableRooms);
+//        System.out.println(availableRooms.size());
 
         assertEquals(2, availableRooms.toArray().length);
 
@@ -120,31 +103,19 @@ public class ViewAvailableMeetingRooms {
     public void viewAvailableRoomsByRoomTypeTestMatchingDates(){
 
         RoomDTO room1 = new RoomDTO();
-        room1.setId ( 1 );
-      //  room1.setBuilding ( testBuilding1 );
-        room1.setCapacity ( 20 );
-        room1.setName ( "PHYSICAL MEETING 1" );
-        room1.setOccupation ( RoomOccupation.MEETING );
-        room1.setFloorNumber ( 1 );
-        room1.setType ( RoomType.PHYSICAL );
+        room1.setId(1);
+        room1.setType("PHYSICAL");
+        room1.setOccupation("MEETING");
 
         RoomDTO room2 = new RoomDTO();
-        room2.setId ( 2 );
-      //  room1.setBuilding ( testBuilding1 );
-        room2.setCapacity ( 20 );
-        room2.setName ( "PHYSICAL MEETING 2" );
-        room2.setOccupation ( RoomOccupation.MEETING );
-        room2.setFloorNumber ( 1 );
-        room2.setType ( RoomType.PHYSICAL );
+        room2.setId(2);
+        room2.setType("PHYSICAL");
+        room2.setOccupation("MEETING");
 
         RoomDTO room3 = new RoomDTO();
-        room3.setId ( 3 );
-        //  room1.setBuilding ( testBuilding1 );
-        room3.setCapacity ( 20 );
-        room3.setName ( "PHYSICAL MEETING 3" );
-        room3.setOccupation ( RoomOccupation.MEETING );
-        room3.setFloorNumber ( 1 );
-        room3.setType ( RoomType.PHYSICAL );
+        room3.setId(3);
+        room3.setType("PHYSICAL");
+        room3.setOccupation("MEETING");
 
         Reservation r1 = new Reservation(1,1,1,1,1,RoomType.PHYSICAL,"Reserver",
                 "01-17-2021 07:00","01-17-2021 10:00");
@@ -169,10 +140,6 @@ public class ViewAvailableMeetingRooms {
 
         List<RoomDTO> availableRooms = reservationService.getAllAvailableMeetingRooms( 1,"01-17-2021 09:00","01-17-2021 11:00" );
 
-
-        System.out.println(availableRooms);
-        System.out.println(availableRooms.size());
-
         assertEquals(1, availableRooms.toArray().length);
 
     }
@@ -181,31 +148,19 @@ public class ViewAvailableMeetingRooms {
     public void viewAvailableRoomsByRoomTypeTestStartDateConflict(){
 
         RoomDTO room1 = new RoomDTO();
-        room1.setId ( 1 );
-      //  room1.setBuilding ( testBuilding1 );
-        room1.setCapacity ( 20 );
-        room1.setName ( "PHYSICAL MEETING 1" );
-        room1.setOccupation ( RoomOccupation.MEETING );
-        room1.setFloorNumber ( 1 );
-        room1.setType ( RoomType.PHYSICAL );
+        room1.setId(1);
+        room1.setType("PHYSICAL");
+        room1.setOccupation("MEETING");
 
         RoomDTO room2 = new RoomDTO();
-        room2.setId ( 2 );
-      //  room1.setBuilding ( testBuilding1 );
-        room2.setCapacity ( 20 );
-        room2.setName ( "PHYSICAL MEETING 2" );
-        room2.setOccupation ( RoomOccupation.MEETING );
-        room2.setFloorNumber ( 1 );
-        room2.setType ( RoomType.PHYSICAL );
+        room2.setId(2);
+        room2.setType("PHYSICAL");
+        room2.setOccupation("MEETING");
 
         RoomDTO room3 = new RoomDTO();
-        room3.setId ( 3 );
-        //  room1.setBuilding ( testBuilding1 );
-        room3.setCapacity ( 20 );
-        room3.setName ( "PHYSICAL MEETING 3" );
-        room3.setOccupation ( RoomOccupation.MEETING );
-        room3.setFloorNumber ( 1 );
-        room3.setType ( RoomType.PHYSICAL );
+        room3.setId(3);
+        room3.setType("PHYSICAL");
+        room3.setOccupation("MEETING");
 
         Reservation r1 = new Reservation(1,1,1,1,1,RoomType.PHYSICAL,"Reserver",
                 "01-17-2021 07:00","01-17-2021 10:00");
@@ -230,43 +185,27 @@ public class ViewAvailableMeetingRooms {
 
         List<RoomDTO> availableRooms = reservationService.getAllAvailableMeetingRooms( 1,"01-17-2021 12:30","01-17-2021 13:30" );
 
-
-        System.out.println(availableRooms);
-        System.out.println(availableRooms.size());
-
         assertEquals(3, availableRooms.toArray().length);
 
     }
-    
+
     @Test
     public void viewAvailableRoomsByRoomTypeTestWrappedDatesConflict(){
 
         RoomDTO room1 = new RoomDTO();
-        room1.setId ( 1 );
-      //  room1.setBuilding ( testBuilding1 );
-        room1.setCapacity ( 20 );
-        room1.setName ( "PHYSICAL MEETING 1" );
-        room1.setOccupation ( RoomOccupation.MEETING );
-        room1.setFloorNumber ( 1 );
-        room1.setType ( RoomType.PHYSICAL );
+        room1.setId(1);
+        room1.setType("PHYSICAL");
+        room1.setOccupation("MEETING");
 
         RoomDTO room2 = new RoomDTO();
-        room2.setId ( 2 );
-      //  room1.setBuilding ( testBuilding1 );
-        room2.setCapacity ( 20 );
-        room2.setName ( "PHYSICAL MEETING 2" );
-        room2.setOccupation ( RoomOccupation.MEETING );
-        room2.setFloorNumber ( 1 );
-        room2.setType ( RoomType.PHYSICAL );
+        room2.setId(2);
+        room2.setType("PHYSICAL");
+        room2.setOccupation("MEETING");
 
         RoomDTO room3 = new RoomDTO();
-        room3.setId ( 3 );
-        //  room1.setBuilding ( testBuilding1 );
-        room3.setCapacity ( 20 );
-        room3.setName ( "PHYSICAL MEETING 3" );
-        room3.setOccupation ( RoomOccupation.MEETING );
-        room3.setFloorNumber ( 1 );
-        room3.setType ( RoomType.PHYSICAL );
+        room3.setId(3);
+        room3.setType("PHYSICAL");
+        room3.setOccupation("MEETING");
 
         Reservation r1 = new Reservation(1,1,1,1,1,RoomType.PHYSICAL,"Reserver",
                 "01-17-2021 07:00","01-17-2021 10:00");
@@ -291,14 +230,10 @@ public class ViewAvailableMeetingRooms {
 
         List<RoomDTO> availableRooms = reservationService.getAllAvailableMeetingRooms( 1,"01-17-2021 06:30","01-17-2021 14:30" );
 
-
-        System.out.println(availableRooms);
-        System.out.println(availableRooms.size());
-
         assertEquals(2, availableRooms.toArray().length);
 
     }
-    
+
     
 
 }

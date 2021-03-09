@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.revature.model.Reservation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 
 

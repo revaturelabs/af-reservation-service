@@ -2,29 +2,35 @@ package com.revature.service;
 
 import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
-import com.revature.model.Room;
-import com.revature.model.RoomOccupation;
-import com.revature.model.RoomType;
+
 import com.revature.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import java.util.stream.Collectors;
 
-import static com.revature.model.RoomType.*;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static com.revature.util.RoomType.PHYSICAL;
+import static com.revature.util.RoomType.VIRTUAL;
+
 
 import com.revature.dto.BatchDTO;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -39,13 +45,15 @@ public class ReservationServiceImpl implements ReservationService {
     
     private RestTemplate restTemplate;
     
+    @Autowired
     public ReservationServiceImpl( ReservationRepository repository ) {
         this.repository = repository;
     }
     public RestTemplate getRestTemplate() {
 		return restTemplate;
 	}
-
+    
+    @Autowired
 	public void setRestTemplate( RestTemplate restTemplate ) {
 		this.restTemplate = restTemplate;
 	}
@@ -77,18 +85,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void assignBatch( Integer reservationId, Integer batchId ) throws NoSuchElementException, 
-    																	IllegalArgumentException {
+    public void assignBatch( Integer reservationId, Integer batchId ) throws NoSuchElementException,
+    																	IllegalStateException,
+    																	RestClientException {
     	
     	Reservation reservation = repository.findById( reservationId ).get();
     	
     	if( reservation.getBatchId() != null ) {
-    		// throw exception
-    		return;
+    		throw new IllegalStateException( "Batch is already assigned to Reservation" );
     	}
     	
-    	// Can throw IllegalArgumentException / 500 http Status code
-    	// but pass the exception to the calling method
+    	// Throws RestClientException if cannot convert to the object
 		BatchDTO batchDto = restTemplate.getForObject(caliberUrl + 
 									    				"batch/" + 
 									    				batchId, 
@@ -97,11 +104,17 @@ public class ReservationServiceImpl implements ReservationService {
 		batchDto.formatDate();
 		
     	// Validate dates
+		if( !datesAreEqualWithoutTime( reservation.getStartDate(), batchDto.startTime )) {
+			throw new IllegalStateException("Batch and Reservation start dates do not match");
+		}
+		
+		if( !datesAreEqualWithoutTime( reservation.getEndDate(), batchDto.endTime )) {
+			throw new IllegalStateException("Batchand Reservation end dates do not match");
+		}
 		
     	reservation.setBatchId(batchId);
     	repository.save(reservation);
     }
-
 
 	@Override
 	public List<Reservation> getAllReservationsByRoomId(Integer roomId) {
@@ -140,7 +153,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 		List<RoomDTO> rooms = Arrays.stream(responseEntity.getBody()).filter(roomDTO -> 
-		roomDTO.getOccupation() == RoomOccupation.MEETING).collect(Collectors.toList());
+		roomDTO.getOccupation().equalsIgnoreCase("MEETING")).collect(Collectors.toList());
 
 		List<Integer> unavailableRoomIds = new ArrayList<>();
 
@@ -195,8 +208,11 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public List<Reservation> getTrainingStationReservations() {
-		return repository.findAll().stream().filter(x -> 
-		x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+    	List<Reservation> list = repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+    	if (list.size() == 0) {
+    		throw new EntityNotFoundException("no training station reservation found");
+		}
+		return list;
 	}
 
 	@Override
@@ -227,12 +243,20 @@ public class ReservationServiceImpl implements ReservationService {
 					reservation.getEndDate().before(res.getEndDate() )  ) {
 				return false;
 			}
+			
+			// or the proposed reservation wraps a prior reservation 
+			if( reservation.getStartDate().before(res.getStartDate() )   && 
+					reservation.getEndDate().after(res.getEndDate() )  ) {
+				return false;
+			}
+			
 			// or if the proposed start date is before a listed end date and the proposed end date 
 			// is after a listed end date
 			if( reservation.getStartDate().before(res.getEndDate()) &&
 					reservation.getEndDate().after( res.getEndDate() ) ) {
 				return false;
 			}
+			
 			// or if the proposed start date and end date match 
 			if( reservation.getStartDate().equals( res.getStartDate() ) ||
 					reservation.getEndDate().equals( res.getEndDate() ) ) {
@@ -245,6 +269,13 @@ public class ReservationServiceImpl implements ReservationService {
 		return true;
 	}
 
-
+	private boolean  datesAreEqualWithoutTime(Date firstDate, Date secondDate) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String tempDateOne = dateFormat.format(firstDate);
+		String tempDateTwo = dateFormat.format(secondDate);
+		
+		
+		return tempDateOne.equals(tempDateTwo);
+	}
 
 }

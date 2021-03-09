@@ -1,4 +1,4 @@
-package com.revature.model;
+package com.revature.util;
 
 public enum RoomType {
 	
