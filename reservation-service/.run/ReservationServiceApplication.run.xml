@@ -7,7 +7,7 @@
     <module name="reservation-service" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.revature.*" />
+        <option name="PATTERN" value="com.revature.config.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
