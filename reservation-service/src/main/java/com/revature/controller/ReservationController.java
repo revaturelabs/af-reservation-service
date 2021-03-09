@@ -42,14 +42,14 @@ public class ReservationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation){
-        reservationService.addReservation(reservation);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        Reservation res = reservationService.addReservation(reservation);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Reservation> updateReservation(@RequestBody Reservation reservation){
-        reservationService.updateReservation(reservation);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        Reservation res = reservationService.updateReservation(reservation);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{reservationId}")
