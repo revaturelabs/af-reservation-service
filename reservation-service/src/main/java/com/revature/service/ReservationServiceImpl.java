@@ -153,46 +153,32 @@ public class ReservationServiceImpl implements ReservationService {
 					.collect(Collectors.toList());
 
 			for (int j = 0; j < reservations.size(); j++) {
-				if(reservations.get(j).getStartDate().after(dates.get("startDate")) &&
-						reservations.get(j).getStartDate().before(dates.get("endDate"))) {
-					unavailableRoomIds.add(reservations.get(j).getRoomId());
-				}
-				if (reservations.get(j).getEndDate().after(dates.get("startDate")) && 
-						reservations.get(j).getEndDate().before(dates.get("endDate"))) {
-					unavailableRoomIds.add(reservations.get(j).getRoomId());
-				}
-				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) || 
-						reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
-					unavailableRoomIds.add(reservations.get(j).getRoomId());
-				}
 
-
-//				if ((reservations.get(j).getStartDate().before(dates.get("startDate")) &&
-//						reservations.get(j).getEndDate().after(dates.get("startDate"))) ||
-//						(reservations.get(j).getStartDate().before(dates.get("endDate")) &&
-//								reservations.get(j).getEndDate().after(dates.get("endDate")))) {
-//
+				if(dates.get("startDate").after(reservations.get(j).getStartDate()) &&
+						dates.get("startDate").before(reservations.get(j).getEndDate())) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
+				if (dates.get("endDate").after(reservations.get(j).getStartDate()) &&
+						dates.get("endDate").before(reservations.get(j).getEndDate())) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
+//				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) ||
+//						reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
 //					unavailableRoomIds.add(reservations.get(j).getRoomId());
-//
 //				}
+
 			}
 
 		}
 		ArrayList<RoomDTO> toBeRemoved = new ArrayList<RoomDTO>();
-//		for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
-//			if( rooms.contains(rooms.get(unavailableRoomIds.get(k)))){
-//				rooms.remove(unavailableRoomIds.get(k));
-//			}
-//		}
-
 		
 		for ( int i = 0; i < rooms.size() ; ++i ) {
+
 			for ( int k = 0; k < unavailableRoomIds.size() ; ++k ) {
+
 				if( rooms.get(i).getId() == unavailableRoomIds.get(k)){
 					//add to the list for removal from list to be returned
 					toBeRemoved.add( rooms.get( i ) );
-//					rooms.remove(i);
-
 				}
 			}
 		}
