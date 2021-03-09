@@ -2,7 +2,7 @@ package com.revature.service;
 
 import com.revature.model.Reservation;
 import com.revature.model.Room;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +16,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ViewAvailableRoomsByRoomTypeTest {

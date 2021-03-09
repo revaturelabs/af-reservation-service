@@ -1,7 +1,7 @@
 package com.revature.service;
 
 import com.revature.model.Reservation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.revature.model.RoomType.VIRTUAL;
+import static com.revature.util.RoomType.VIRTUAL;
 import static org.mockito.Mockito.*;
 
 

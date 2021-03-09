@@ -1,7 +1,7 @@
 package com.revature.service;
 
 import com.revature.model.Reservation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;

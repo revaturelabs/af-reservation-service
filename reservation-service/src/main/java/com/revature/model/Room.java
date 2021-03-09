@@ -1,5 +1,8 @@
 package com.revature.model;
 
+import com.revature.util.RoomOccupation;
+import com.revature.util.RoomType;
+
 import java.util.Map;
 
 public class Room {

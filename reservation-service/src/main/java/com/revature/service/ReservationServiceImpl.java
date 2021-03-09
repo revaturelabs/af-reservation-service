@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.revature.model.RoomType.VIRTUAL;
+import static com.revature.util.RoomType.VIRTUAL;
 
 import com.revature.dto.BatchDTO;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -118,7 +120,11 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public List<Reservation> getTrainingStationReservations() {
-		return repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+    	List<Reservation> list = repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+    	if (list.size() == 0) {
+    		throw new EntityNotFoundException("no training station reservation found");
+		}
+		return list;
 	}
 
 	@Override
