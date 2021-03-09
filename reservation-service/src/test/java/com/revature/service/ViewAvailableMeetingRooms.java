@@ -172,6 +172,7 @@ public class ViewAvailableMeetingRooms {
         assertEquals(1, availableRooms.toArray().length);
 
     }
+    
     @Test
     public void viewAvailableRoomsByRoomTypeTestStartDateConflict(){
 
