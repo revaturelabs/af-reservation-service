@@ -20,7 +20,8 @@ public class RoomDTO {
     private RoomType type;
     private RoomOccupation occupation;
     private int capacity;
-    private Building building;
+    //comment it because location server did not have building in their RoomDTO
+    //private Building building;
     private Map<String, Integer> roomAmenities;
     private int floorNumber;
 
