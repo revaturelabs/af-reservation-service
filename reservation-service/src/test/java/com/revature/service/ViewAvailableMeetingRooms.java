@@ -147,7 +147,7 @@ public class ViewAvailableMeetingRooms {
         Reservation r2 = new Reservation(1,1,1,1,1,RoomType.PHYSICAL,"Reserver",
                 "01-17-2021 10:00","01-17-2021 11:00");
         Reservation r3 = new Reservation(1,1,1,1,2,RoomType.PHYSICAL,"Reserver",
-                "01-18-2021 09:00","01-18-2021 11:00");
+                "01-17-2021 09:00","01-17-2021 11:00");
         Reservation r4 = new Reservation(1,1,1,1,2,RoomType.PHYSICAL,"Reserver",
                 "01-18-2021 12:00","01-18-2021 13:00");
 
