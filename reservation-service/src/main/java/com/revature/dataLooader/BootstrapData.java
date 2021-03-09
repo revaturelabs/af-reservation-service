@@ -1,7 +1,7 @@
 package com.revature.dataLooader;
 
 import com.revature.model.Reservation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

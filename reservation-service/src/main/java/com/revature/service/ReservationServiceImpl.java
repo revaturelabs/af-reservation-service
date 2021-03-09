@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.revature.model.RoomType.VIRTUAL;
+import static com.revature.util.RoomType.VIRTUAL;
 
 import com.revature.dto.BatchDTO;
 

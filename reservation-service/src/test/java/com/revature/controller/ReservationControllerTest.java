@@ -1,9 +1,8 @@
 package com.revature.controller;
 
 import com.revature.model.Reservation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomType;
 import com.revature.service.ReservationService;
-import com.revature.service.ReservationServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

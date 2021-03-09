@@ -1,8 +1,7 @@
 package com.revature.dto;
 
-import com.revature.model.Building;
-import com.revature.model.RoomOccupation;
-import com.revature.model.RoomType;
+import com.revature.util.RoomOccupation;
+import com.revature.util.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
