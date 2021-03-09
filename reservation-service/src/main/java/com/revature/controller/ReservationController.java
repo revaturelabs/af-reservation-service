@@ -1,5 +1,6 @@
 package com.revature.controller;
 
+import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 import com.revature.service.ReservationService;
 import io.swagger.annotations.Api;
@@ -91,5 +92,13 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getTrainingStationReservations(){
         return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
+
+    @GetMapping(path="/{buildingId}/meetingrooms")
+    public ResponseEntity<List<RoomDTO>> getAllAvailableMeetingRooms(@PathVariable Integer buildingId, @RequestParam String startDate, @RequestParam String endDate){
+        List<RoomDTO> availableMeetingRooms = reservationService.getAllAvailableMeetingRooms(buildingId, startDate, endDate);
+        return new ResponseEntity<>(availableMeetingRooms,HttpStatus.OK);
+
+    }
+
 
 }
