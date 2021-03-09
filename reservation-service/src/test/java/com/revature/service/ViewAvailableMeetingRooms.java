@@ -291,7 +291,7 @@ public class ViewAvailableMeetingRooms {
         System.out.println(availableRooms);
         System.out.println(availableRooms.size());
 
-        assertEquals(1, availableRooms.toArray().length);
+        assertEquals(2, availableRooms.toArray().length);
 
     }
     

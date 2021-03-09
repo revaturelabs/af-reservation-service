@@ -162,10 +162,14 @@ public class ReservationServiceImpl implements ReservationService {
 						dates.get("endDate").before(reservations.get(j).getEndDate())) {
 					unavailableRoomIds.add(reservations.get(j).getRoomId());
 				}
-//				if (reservations.get(j).getStartDate().equals(dates.get("startDate")) ||
-//						reservations.get(j).getEndDate().equals(dates.get("endDate"))) {
-//					unavailableRoomIds.add(reservations.get(j).getRoomId());
-//				}
+				if (dates.get("startDate").before(reservations.get(j).getStartDate()) &&
+						dates.get("endDate").after(reservations.get(j).getEndDate())) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
+				if (dates.get("startDate").equals(reservations.get(j).getStartDate()) &&
+						dates.get("endDate").equals(reservations.get(j).getEndDate())) {
+					unavailableRoomIds.add(reservations.get(j).getRoomId());
+				}
 
 			}
 
