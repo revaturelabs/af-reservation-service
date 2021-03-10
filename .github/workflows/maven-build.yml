@@ -1,4 +1,4 @@
-name: CI Unit Test on PR to Main
+name: Package and Image Build with Maven and Docker
 
 on:
   push:
