@@ -1,17 +1,7 @@
 package com.revature.dto;
 import com.revature.util.RoomOccupation;
 import com.revature.util.RoomType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import java.util.Map;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 public class RoomDTO {
     private int id;
     private String type;
@@ -25,6 +15,14 @@ public class RoomDTO {
         this.id = id;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getOccupation() {
         return occupation;
     }
@@ -32,6 +30,16 @@ public class RoomDTO {
     public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
+
+    @Override
+    public String toString() {
+        return "RoomDTO{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", occupation='" + occupation + '\'' +
+                '}';
+    }
+
     //    private RoomType type;
 //    private RoomOccupation occupation;
 //    private int capacity;
