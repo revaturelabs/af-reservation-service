@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: af-reservation-svc
+  labels:
+    app: assignforce
+spec:
+  ports:
+    - port: 10000
+      targetPort: res-http
+      protocol: TCP
+  selector:
+    service: reservation
