@@ -2,10 +2,6 @@ package com.revature.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.revature.util.RoomType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
