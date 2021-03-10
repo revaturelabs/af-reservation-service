@@ -83,7 +83,7 @@ public class TrainingStationReservationTest {
     @Test
     public void GetTrainingStationById(){
 
-        Reservation getRes = reservationService.getReservationById(9);
+        Reservation getRes = reservationService.getReservationById(1);
         Assert.assertEquals(reservation1, getRes);
     }
 
