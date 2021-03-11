@@ -34,14 +34,23 @@ public class BootstrapData implements CommandLineRunner {
         Reservation reservation1 = new Reservation(
                 9,1,1,1,1, RoomType.PHYSICAL,"Revature CEO",
                 "01-17-2021 09:00","01-17-2021 17:00");
+        
         Reservation reservation2 = new Reservation(
                 6,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
                 "01-18-2021 09:00","01-18-2021 17:00");
+        
         Reservation reservation3 = new Reservation(
                 8,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
                 "01-19-2021 09:00","01-19-2021 17:00");
+        
+        Reservation reservation4 = new Reservation(
+                7,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                "01-19-2021 09:00","01-19-2021 17:00");
 
-        List<Reservation> reservationList = new ArrayList<>(Arrays.asList(reservation1, reservation2,reservation3));
+        List<Reservation> reservationList = new ArrayList<>( Arrays.asList( reservation1,
+        																	reservation2,
+        																	reservation3,
+        																	reservation4 ));
 
         repository.saveAll(reservationList);
     }
