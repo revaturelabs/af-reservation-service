@@ -46,7 +46,6 @@ jobs:
           cluster_name: ${{ secrets.EKS_ASSIGNFORCE_CLUSTER_NAME }}
         with:
           args: |
-            kubectl set image deployment/$DEPLOYMENT_NAME -n default
-            $DEPLOYMENT_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG &&
+            kubectl set image deployment/$DEPLOYMENT_NAME -n default $DEPLOYMENT_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG &&
             kubectl rollout status deployment/$DEPLOYMENT_NAME -n default
           
