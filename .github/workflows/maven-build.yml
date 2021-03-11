@@ -33,9 +33,9 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $GITHUB_WORKSPACE/reservation-service/
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      - name: EKS Deploy
-        uses: ianbelcher/eks-kubectl-action@master
-        env:
+      - name: EKS kubectl
+        uses: ianbelcher/eks-kubectl-action@v1.1
+        with:
           aws_access_key_id: ${{ secrets.ECR_PUBLISHER_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.ECR_PUBLISHER_SECRET_ACCESS_KEY_ID }}
           aws_region: ${{ secrets.ECR_REGION }}
@@ -44,6 +44,5 @@ jobs:
           ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: ${{secrets.AF_RESERVATION_ECR_REPO}}
           IMAGE_TAG: ${{github.sha}}
-        with:
           args: set image --record deployment/$DEPLOYMENT_NAME pod-name=$ECR_REGISTRY/ECR_REPOSITORY:$IMAGE_TAG
           
