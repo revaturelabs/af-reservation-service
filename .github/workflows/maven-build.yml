@@ -35,14 +35,15 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: EKS kubectl
         uses: ianbelcher/eks-kubectl-action@v1.1
+        env:
+          DEPLOYMENT_NAME: af-reservation
+          ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
+          ECR_REPOSITORY: ${{secrets.AF_RESERVATION_ECR_REPO}}
+          IMAGE_TAG: ${{github.sha}}
         with:
           aws_access_key_id: ${{ secrets.ECR_PUBLISHER_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.ECR_PUBLISHER_SECRET_ACCESS_KEY_ID }}
           aws_region: ${{ secrets.ECR_REGION }}
           cluster_name: ${{ secrets.EKS_ASSIGNFORCE_CLUSTER_NAME }}
-          DEPLOYMENT_NAME: af-reservation
-          ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
-          ECR_REPOSITORY: ${{secrets.AF_RESERVATION_ECR_REPO}}
-          IMAGE_TAG: ${{github.sha}}
           args: set image --record deployment/$DEPLOYMENT_NAME pod-name=$ECR_REGISTRY/ECR_REPOSITORY:$IMAGE_TAG
           
