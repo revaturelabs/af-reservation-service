@@ -81,6 +81,14 @@ public class Reservation {
 
 	}
 
+	public RoomOccupation getRoomOccupation() {
+		return roomOccupation;
+	}
+
+	public void setRoomOccupation(RoomOccupation roomOccupation) {
+		this.roomOccupation = roomOccupation;
+	}
+
 	public Integer getReservationId() {
 		return reservationId;
 	}

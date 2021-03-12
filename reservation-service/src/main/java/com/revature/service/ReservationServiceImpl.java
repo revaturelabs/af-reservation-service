@@ -4,6 +4,7 @@ import com.revature.dto.RoomDTO;
 import com.revature.model.Reservation;
 
 import com.revature.repository.ReservationRepository;
+import com.revature.util.RoomOccupation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -207,7 +208,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public List<Reservation> getTrainingStationReservations() {
-    	List<Reservation> list = repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL)).collect(Collectors.toList());
+    	List<Reservation> list = repository.findAll().stream().filter(x -> x.getRoomOccupation().equals(RoomOccupation.TRAINING)).collect(Collectors.toList());
     	if (list.size() == 0) {
     		throw new EntityNotFoundException("no training station reservation found");
 		}
