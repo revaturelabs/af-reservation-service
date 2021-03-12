@@ -1,6 +1,7 @@
 package com.revature.dataLooader;
 
 import com.revature.model.Reservation;
+import com.revature.util.RoomOccupation;
 import com.revature.util.RoomType;
 import com.revature.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,15 +34,15 @@ public class BootstrapData implements CommandLineRunner {
 
         Reservation reservation1 = new Reservation(
                 9,1,2,1,1, RoomType.PHYSICAL,"Revature CEO",
-                "01-17-2021 09:00","01-17-2021 17:00");
+                "01-17-2021 09:00","01-17-2021 17:00", RoomOccupation.MEETING);
         
         Reservation reservation2 = new Reservation(
                 6,1,1,1,2,RoomType.PHYSICAL,"Revature CEO",
-                "01-18-2021 09:00","01-18-2021 17:00");
+                "01-18-2021 09:00","01-18-2021 17:00", RoomOccupation.TRAINING);
         
         Reservation reservation3 = new Reservation(
                 8,1,2,1,2,RoomType.VIRTUAL,"Revature CEO",
-                "01-19-2021 09:00","01-19-2021 17:00");
+                "01-19-2021 09:00","01-19-2021 17:00", RoomOccupation.MEETING);
         
         Reservation reservation4 = new Reservation(
                 7,1,1,1,RoomType.PHYSICAL,"Revature CEO",
