@@ -2,6 +2,7 @@ package com.revature.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.revature.util.RoomOccupation;
 import com.revature.util.RoomType;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Reservation {
 	private Integer locationId;
 	private Integer roomId;
 	private RoomType roomType;
+	private RoomOccupation roomOccupation;
 	private String reserver;
 
 	@Column(name = "start_date")
@@ -43,7 +45,7 @@ public class Reservation {
 
 	public Reservation(Integer reservationId, Integer batchId, Integer buildingId, 
 			Integer locationId, Integer roomId, RoomType roomType, String reserver, String startDate,
-			String endDate) {
+			String endDate, RoomOccupation roomOccupation) {
 		super();
 		this.reservationId = reservationId;
 		this.batchId = batchId;
@@ -52,6 +54,7 @@ public class Reservation {
 		this.roomId = roomId;
 		this.roomType = roomType;
 		this.reserver = reserver;
+		this.roomOccupation = roomOccupation;
 		try {
 			this.startDate = DATEFORMAT.parse( startDate );
 			this.endDate = DATEFORMAT.parse( endDate );
@@ -61,13 +64,29 @@ public class Reservation {
 		}
 	}
 	
-	public Reservation(Integer reservationId, Integer buildingId, 
+	public Reservation(Integer reservationId, Integer buildingId,
 			Integer locationId, Integer roomId, RoomType roomType, String reserver, String startDate,
 			String endDate) {
+
+		this( reservationId, null, buildingId, locationId, roomId, roomType, reserver,
+				startDate, endDate, null );
 		
-		this( reservationId, null, buildingId, locationId, roomId, roomType, reserver, 
-				startDate, endDate );
-		
+	}
+
+	public Reservation(Integer reservationId,Integer batchId, Integer buildingId,
+					   Integer locationId, Integer roomId, RoomType roomType, String reserver, String startDate,
+					   String endDate) {
+		this( reservationId, batchId, buildingId, locationId, roomId, roomType, reserver,
+				startDate, endDate, null );
+
+	}
+
+	public RoomOccupation getRoomOccupation() {
+		return roomOccupation;
+	}
+
+	public void setRoomOccupation(RoomOccupation roomOccupation) {
+		this.roomOccupation = roomOccupation;
 	}
 
 	public Integer getReservationId() {
