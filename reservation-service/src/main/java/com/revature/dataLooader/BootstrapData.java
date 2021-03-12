@@ -45,7 +45,7 @@ public class BootstrapData implements CommandLineRunner {
         
         Reservation reservation4 = new Reservation(
                 7,1,1,1,RoomType.PHYSICAL,"Revature CEO",
-                "01-19-2021 09:00","01-19-2021 17:00");
+                "02-12-2021 09:00","04-23-2021 17:00");
 
         List<Reservation> reservationList = new ArrayList<>( Arrays.asList( reservation1,
         																	reservation2,

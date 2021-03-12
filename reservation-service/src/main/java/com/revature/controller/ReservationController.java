@@ -85,7 +85,8 @@ public class ReservationController {
 													HttpStatus.NOT_FOUND );
     	}
     	
-        return new ResponseEntity<String>( "Batch assigned successfully", HttpStatus.CREATED );
+        return new ResponseEntity<String>( "{" + '"' + "body" + '"' + ":" + '"' + 
+        					"Batch assigned successfully"+ '"' +"}", HttpStatus.CREATED );
     }
 
     @GetMapping(path = "/trainingstations", produces = MediaType.APPLICATION_JSON_VALUE)
