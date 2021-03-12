@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: af-reservation
+  labels:
+    app: assignforce
+    service: reservation
+spec:
+  selector:
+    matchLabels:
+      service: reservation
+  template:
+    metadata:
+      labels:
+        service: reservation
+    spec:
+      containers:
+        - name: af-reservation
+          image: 855430746673.dkr.ecr.us-east-1.amazonaws.com/af-reservation-service:fc4072833cc91ffdb1bf9f5a39d4013fcd343818
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: res-http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "750m"
+              memory: "1500m"
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            failureThreshold: 2
+            periodSeconds: 20
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            successThreshold: 3
+            failureThreshold: 2
+            periodSeconds: 30
+            timeoutSeconds: 2
