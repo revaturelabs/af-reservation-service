@@ -211,11 +211,11 @@ public class Reservation {
 		
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "ReservationID: " + reservationId + " BatchID: " + batchId + " BuildingID: " + 
+		return "ReservationID: " + reservationId + " BatchID: " + batchId + " BuildingID: " +
 					buildingId + " LocationID: " + locationId + " roomId: " + roomId +
-					" RoomType: " + roomType + " Reserver: " + reserver;
+					" RoomType: " + roomType + " Reserver: " + reserver + "RoomOccupation: " + roomOccupation;
 	}
 }
