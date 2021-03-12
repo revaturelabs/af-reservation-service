@@ -32,15 +32,15 @@ public class BootstrapData implements CommandLineRunner {
         System.out.println("Environment Running: " + myValue.toUpperCase());
 
         Reservation reservation1 = new Reservation(
-                9,1,1,1,1, RoomType.PHYSICAL,"Revature CEO",
+                9,1,2,1,1, RoomType.PHYSICAL,"Revature CEO",
                 "01-17-2021 09:00","01-17-2021 17:00");
         
         Reservation reservation2 = new Reservation(
-                6,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                6,1,1,1,2,RoomType.PHYSICAL,"Revature CEO",
                 "01-18-2021 09:00","01-18-2021 17:00");
         
         Reservation reservation3 = new Reservation(
-                8,1,1,1,1,RoomType.PHYSICAL,"Revature CEO",
+                8,1,2,1,2,RoomType.VIRTUAL,"Revature CEO",
                 "01-19-2021 09:00","01-19-2021 17:00");
         
         Reservation reservation4 = new Reservation(

@@ -17,4 +17,6 @@ public interface ReservationService {
   	boolean isValidReservation(Reservation reservation);
     List<RoomDTO> getAllAvailableMeetingRooms(Integer BuildingId, String startDate, String endDate);
     List<Reservation> getTrainingStationReservations();
+    List<Reservation> getTrainingStationReservationsByBuildingId(Integer buildingId);
+
 }
