@@ -215,6 +215,15 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
+	public List<Reservation> getTrainingStationReservationsByBuildingId(Integer buildingId) {
+		List<Reservation> list = repository.findAll().stream().filter(x -> x.getRoomType().equals(VIRTUAL) && x.getBuildingId() == buildingId).collect(Collectors.toList());
+		if (list.size() == 0) {
+			throw new EntityNotFoundException("no training station reservation found");
+		}
+		return list;
+	}
+
+	@Override
 	public boolean isValidReservation(Reservation reservation) {
 		
 		

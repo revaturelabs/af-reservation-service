@@ -93,6 +93,11 @@ public class ReservationController {
         return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservations(),HttpStatus.OK);
     }
 
+    @GetMapping(path = "/trainingstations/building/{buildingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Reservation>> getTrainingStationReservationsByBuildingId(@PathVariable Integer buildingId){
+        return new ResponseEntity<List<Reservation>>(reservationService.getTrainingStationReservationsByBuildingId(buildingId),HttpStatus.OK);
+    }
+
     @GetMapping(path="/{buildingId}/meetingrooms")
     public ResponseEntity<List<RoomDTO>> getAllAvailableMeetingRooms(@PathVariable Integer buildingId, @RequestParam String startDate, @RequestParam String endDate){
         List<RoomDTO> availableMeetingRooms = reservationService.getAllAvailableMeetingRooms(buildingId, startDate, endDate);
