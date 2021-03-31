@@ -43,7 +43,7 @@ public class ReservationController {
                                                          @RequestParam(name = "action", defaultValue = "") String action,
                                                          @RequestBody Reservation reservation){
         User user = new User(1, "test@email.revature.com", "admin");
-        if (action == "cancel"){
+        if (action.equals("cancel")){
             reservationService.cancelReservation(reservationId, user);
         }
         else {
