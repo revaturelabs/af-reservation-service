@@ -36,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService{
         }
 
         // check to make sure there isn't a conflict with other reservations
-        Set<Reservation> conflicts = reservationRepo.findByRoomIdWithTimeCheck(reservation.getStartTime(), reservation.getEndTime(), reservation.getRoomId());
+        Set<Reservation> conflicts = reservationRepo.findConflicts(reservation.getRoomId(), reservation.getStartTime(), reservation.getEndTime());
         if(conflicts.size() > 0) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Attempting to create reservation with conflicting time");
         }
@@ -60,7 +60,7 @@ public class ReservationServiceImpl implements ReservationService{
         }
 
         // check to make sure there isn't a conflict with other reservations
-        Set<Reservation> conflicts = reservationRepo.findByRoomIdWithTimeCheck(reservation.getStartTime(), reservation.getEndTime(), reservation.getRoomId());
+        Set<Reservation> conflicts = reservationRepo.findConflicts(reservation.getRoomId(), reservation.getStartTime(), reservation.getEndTime());
         if(conflicts.size() > 0) {
             // we should be allowed to conflict with this current reservation because we are going to update it in the database, but haven't yet
             Reservation check = conflicts.iterator().next();

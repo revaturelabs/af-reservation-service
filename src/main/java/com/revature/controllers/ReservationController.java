@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.entities.Reservation;
+import com.revature.entities.User;
 import com.revature.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,11 +42,12 @@ public class ReservationController {
                                                          @PathVariable int reservationId,
                                                          @RequestParam(name = "action", defaultValue = "") String action,
                                                          @RequestBody Reservation reservation){
+        User user = new User(1, "test@email.revature.com", "admin");
         if (action == "cancel"){
-            reservationService.cancelReservation(reservationId);
+            reservationService.cancelReservation(reservationId, user);
         }
         else {
-            reservationService.updateReservationTime(reservation);
+            reservationService.updateReservationTime(reservation, user);
         }
         return ResponseEntity.status(200).body(reservation);
     }
