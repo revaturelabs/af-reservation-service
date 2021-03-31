@@ -13,6 +13,6 @@ import java.util.Set;
 public interface ReservationRepo extends CrudRepository<Reservation, Integer> {
     Set<Reservation> findByRoomIdAndStatus(int roomId, String status);
 
-    @Query("SELECT * FROM Reservation WHERE Reservation.status = 'reserved' and Reservation.roomId = ?3 and ((Reservation.startTime < ?2 and not Reservation.endTime < ?1) or (Reservation.endTime > ?1 and not Reservation.startTime > ?2))")
-    Set<Reservation> findByRoomIdWithTimeCheck(long start, long end, int roomId);
+    @Query("select r from Reservation r WHERE r.status = 'reserved' and r.roomId = ?1 and ((r.startTime < ?2 and ?2 < r.endTime) or (?2 < r.startTime and r.startTime < ?3))")
+    Set<Reservation> findConflicts(int roomId, long start, long end);
 }
