@@ -26,6 +26,14 @@ public class Room {
     public Room() {
     }
 
+    public Room(int roomId, String name, String type, int buildingId, int capacity) {
+        this.roomId = roomId;
+        this.name = name;
+        this.type = type;
+        this.buildingId = buildingId;
+        this.capacity = capacity;
+    }
+
     public int getRoomId() {
         return roomId;
     }

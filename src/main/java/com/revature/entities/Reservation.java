@@ -30,12 +30,21 @@ public class Reservation {
     public Reservation() {
     }
 
+    public Reservation(int reservationId, String reserver, long startTime, long endTime, String status, int roomId) {
+        this.reservationId = reservationId;
+        this.reserver = reserver;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.roomId = roomId;
+    }
+
     public int getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(int id) {
-        this.reservationId = id;
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
     }
 
     public String getReserver() {
@@ -81,7 +90,7 @@ public class Reservation {
     @Override
     public String toString() {
         return "Reservation{" +
-                "id=" + reservationId +
+                "reservationId=" + reservationId +
                 ", reserver='" + reserver + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +

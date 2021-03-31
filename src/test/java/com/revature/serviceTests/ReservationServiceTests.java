@@ -42,13 +42,9 @@ public class ReservationServiceTests {
     @Test
     void create_reservation() {
         Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(505);
-        reservation.setReserver(user.getEmail());
-        reservation.setStartTime(System.currentTimeMillis()/1000L);
-        reservation.setEndTime((System.currentTimeMillis()/1000L) + 3600);
-        reservation.setStatus("jdjdjdjdjd");
-        reservation.setRoomId(0);
+        long startTime = System.currentTimeMillis()/1000L;
+        long endTime = startTime + 3600;
+        Reservation reservation = new Reservation(505,user.getEmail(),startTime,endTime,"jdjdjdjdjd",0);
 
         Reservation newReservation = service.createReservation(reservation);
         Assertions.assertEquals(0, newReservation.getReservationId());
@@ -56,71 +52,62 @@ public class ReservationServiceTests {
     }
 
     @Test
-    void create_reservation_bad_time_period() {
+    void create_reservation_invalid_times() {
         Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(505);
-        reservation.setReserver(user.getEmail());
-        reservation.setStartTime(System.currentTimeMillis()/1000L);
-        reservation.setEndTime((System.currentTimeMillis()/1000L) - 3600);
-        reservation.setStatus("reserved");
-        reservation.setRoomId(0);
+        long startTime = System.currentTimeMillis()/1000L;
+        long endTime = startTime - 3600;
+        Reservation reservation = new Reservation(505,user.getEmail(),startTime,endTime,"jdjdjdjdjd",0);
 
         Assertions.assertThrows(ResponseStatusException.class, ()-> service.createReservation(reservation));
     }
 
     @Test
     void update_reservation_time() {
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(1);
-        reservation.setReserver(user.getEmail());
-        reservation.setStartTime(System.currentTimeMillis()/1000L);
-        reservation.setEndTime((System.currentTimeMillis()/1000L) + 3600);
-        reservation.setStatus("reserved");
-        reservation.setRoomId(2);
+        long startTime = System.currentTimeMillis()/1000L;
+        long endTime = startTime + 3600;
+        Reservation reservation = new Reservation(1,user.getEmail(),startTime,endTime,"reserved",2);
 
         Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
         Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
 
-        Reservation update = new Reservation();
-        update.setReservationId(1);
-        update.setReserver(user.getEmail());
-        long newStartTime = System.currentTimeMillis()/1000L + 3600;
-        long newEndTime = newStartTime + 3600;
-        update.setStartTime(newStartTime);
-        reservation.setEndTime(newEndTime);
-        reservation.setStatus("canceled");
-        reservation.setRoomId(4);
+        Reservation update = new Reservation(1,user.getEmail(),startTime,endTime,"canceled",4);
+        update.setStartTime(startTime + 3600);
+        update.setEndTime(endTime + 3600);
 
         Reservation updated = service.updateReservationTime(update);
-        Assertions.assertEquals(newStartTime, updated.getStartTime());
-        Assertions.assertEquals(newEndTime, updated.getEndTime());
+        Assertions.assertEquals(startTime + 3600, updated.getStartTime());
+        Assertions.assertEquals(endTime + 3600, updated.getEndTime());
         Assertions.assertEquals(2, updated.getRoomId());
         Assertions.assertEquals("reserved", updated.getStatus());
     }
 
     @Test
+    void updated_reservation_time_invalid_times(){
+        long startTime = System.currentTimeMillis()/1000L;
+        long endTime = startTime + 3600;
+        Reservation reservation = new Reservation(1,user.getEmail(),startTime,endTime,"reserved",2);
+
+        Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
+        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
+
+        Reservation update = new Reservation(1,user.getEmail(),startTime,endTime,"canceled",4);
+        update.setStartTime(startTime + 3600);
+        update.setEndTime(endTime - 3600);
+
+        service.updateReservationTime(update);
+
+        Assertions.assertThrows(ResponseStatusException.class, ()-> service.updateReservationTime(reservation));
+    }
+
+    @Test
     void get_active_reservations_by_room_id() {
+        long startTime = System.currentTimeMillis()/1000;
+        long endTime = startTime + 3600;
         Set<Reservation> reservationSet = new HashSet<>();
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(2);
-        reservation.setReserver(user.getEmail());
-        reservation.setStartTime(System.currentTimeMillis()/1000L);
-        reservation.setEndTime((System.currentTimeMillis()/1000L) + 3600);
-        reservation.setStatus("reserved");
-        reservation.setRoomId(1);
-
-        reservationSet.add(reservation);
-
-        reservation = new Reservation();
-        reservation.setReservationId(4);
-        reservation.setReserver(user.getEmail());
-        reservation.setStartTime(System.currentTimeMillis()/1000L+ 3700);
-        reservation.setEndTime((System.currentTimeMillis()/1000L) + 7300);
-        reservation.setStatus("reserved");
-        reservation.setRoomId(1);
-
-        reservationSet.add(reservation);
+        Reservation reservation1 = new Reservation(2, user.getEmail(), startTime, endTime, "reserved", 1);
+        Reservation reservation2 = new Reservation(4, user.getEmail(), startTime+3600, endTime+3600, "reserved", 1);
+        reservationSet.add(reservation1);
+        reservationSet.add(reservation2);
 
         Mockito.when(reservationRepo.findByRoomIdAndStatus(1, "reserved")).thenReturn(reservationSet);
 
