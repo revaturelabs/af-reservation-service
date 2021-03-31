@@ -132,7 +132,7 @@ public class ReservationServiceTests {
 
         Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
 
-        Reservation cancelledReservation = service.cancelReservation(1);
+        Reservation cancelledReservation = service.cancelReservation(1, user);
 
         Assertions.assertEquals("cancelled", cancelledReservation.getStatus());
     }
@@ -160,7 +160,7 @@ public class ReservationServiceTests {
     @Test
     void cancel_reservation_not_found() {
         Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(null);
-        Assertions.assertThrows(ResponseStatusException.class, ()-> service.cancelReservation(2));
+        Assertions.assertThrows(ResponseStatusException.class, ()-> service.cancelReservation(2, user));
     }
 
     @Test
