@@ -5,7 +5,9 @@ import com.revature.entities.User;
 import com.revature.repos.ReservationRepo;
 import com.revature.repos.RoomRepo;
 import com.revature.services.ReservationService;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -36,12 +38,15 @@ public class ReservationServiceTests {
     @InjectMocks
     static ReservationService service;
 
-
     static User user = new User(1, "john.doe@revature.com", "trainer");
+
+    @BeforeAll()
+    void setup(){
+        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
+    }
 
     @Test
     void create_reservation() {
-        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
         long startTime = System.currentTimeMillis()/1000L;
         long endTime = startTime + 3600;
         Reservation reservation = new Reservation(505,user.getEmail(),startTime,endTime,"jdjdjdjdjd",0);
@@ -53,7 +58,6 @@ public class ReservationServiceTests {
 
     @Test
     void create_reservation_invalid_times() {
-        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
         long startTime = System.currentTimeMillis()/1000L;
         long endTime = startTime - 3600;
         Reservation reservation = new Reservation(505,user.getEmail(),startTime,endTime,"jdjdjdjdjd",0);
@@ -68,7 +72,6 @@ public class ReservationServiceTests {
         Reservation reservation = new Reservation(1,user.getEmail(),startTime,endTime,"reserved",2);
 
         Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
-        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
 
         Reservation update = new Reservation(1,user.getEmail(),startTime,endTime,"canceled",4);
         update.setStartTime(startTime + 3600);
@@ -88,7 +91,6 @@ public class ReservationServiceTests {
         Reservation reservation = new Reservation(1,user.getEmail(),startTime,endTime,"reserved",2);
 
         Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
-        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
 
         Reservation update = new Reservation(1,user.getEmail(),startTime,endTime,"canceled",4);
         update.setStartTime(startTime + 3600);
@@ -100,19 +102,15 @@ public class ReservationServiceTests {
     }
 
     @Test
-    void get_active_reservations_by_room_id() {
-        long startTime = System.currentTimeMillis()/1000;
+    void cancel_reservation(){
+        long startTime = System.currentTimeMillis()/1000L;
         long endTime = startTime + 3600;
-        Set<Reservation> reservationSet = new HashSet<>();
-        Reservation reservation1 = new Reservation(2, user.getEmail(), startTime, endTime, "reserved", 1);
-        Reservation reservation2 = new Reservation(4, user.getEmail(), startTime+3600, endTime+3600, "reserved", 1);
-        reservationSet.add(reservation1);
-        reservationSet.add(reservation2);
+        Reservation reservation = new Reservation(1,user.getEmail(),startTime,endTime,"reserved",2);
 
-        Mockito.when(reservationRepo.findByRoomIdAndStatus(1, "reserved")).thenReturn(reservationSet);
+        Mockito.when(reservationRepo.findById(anyInt()).orElse(null)).thenReturn(reservation);
 
-        Set<Reservation> check = service.getActiveReservationsByRoomId(1);
-        Assertions.assertEquals(2, check.size());
+        Reservation cancelledReservation = service.cancelReservation(1);
+
+        Assertions.assertEquals("cancelled", cancelledReservation.getStatus());
     }
-
 }
