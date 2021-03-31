@@ -26,6 +26,8 @@ public class LoggingAspect {
     }
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-    private void logPointCut(){}
+    private void logPointCut(){
+        // Pointcut to log at every RestController method call
+    }
 
 }
