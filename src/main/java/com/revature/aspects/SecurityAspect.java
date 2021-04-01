@@ -1,10 +1,13 @@
 package com.revature.aspects;
 
 import com.revature.dtos.DecodedJwtDTO;
-import com.revature.entities.Reservation;
+import org.apache.log4j.Logger;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,31 +21,38 @@ import java.util.Collections;
 
 @Component
 @Aspect
-
 public class SecurityAspect {
+    private Logger logger = Logger.getLogger(SecurityAspect.class);
 
-
-    public Object VerfyJwt(DecodedJwtDTO decodedJwtDTO)
-    {
+    @Around("controllerMethodsPointCut()")
+    public Object verifyJwt(ProceedingJoinPoint pjp) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-
         String auth = request.getHeader("Authorization");
-        WebClient webClient = WebClient.create("http://localhost:8080");
-        return webClient.post()
-                .uri("/")
-                .body(Mono.just(decodedJwtDTO), Reservation.class)
-                .retrieve()
-                .bodyToMono(Reservation.class);
+
+        WebClient webClient = WebClient.create(System.getenv("AUTH_SERVER"));
+        try{
+            DecodedJwtDTO decodedJwtDTO = webClient
+                    .post()
+                    .body(Mono.just(auth), String.class)
+                    .retrieve()
+                    .onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
+                            clientResponse -> {
+                                Mono.empty();
+                                return null;
+                            })
+                    .bodyToMono(DecodedJwtDTO.class).block();
+            if (decodedJwtDTO.getId() != 0){
+                logger.info("JWT verified: " + decodedJwtDTO);
+                Object obj = pjp.proceed();
+                return obj;
+            }
+        }catch(Exception e){
+            logger.error("Unable to verify JWT");
+        }
+        return null;
     }
 
-
-
-
-    WebClient client = WebClient.builder()
-            .baseUrl("http://localhost:8080")
-            .defaultCookie("cookieKey", "cookieValue")
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8080"))
-            .build();
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+    private void controllerMethodsPointCut(){}
 }
