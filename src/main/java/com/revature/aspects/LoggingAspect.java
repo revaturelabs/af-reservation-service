@@ -10,24 +10,23 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     private static Logger logger = Logger.getLogger(LoggingAspect.class);
 
-    @Before("logPointCut()")
+    @Before("logAllMethods()")
     public void logRequest(JoinPoint joinPoint){
         logger.info("Attempting incoming request: "+joinPoint.toString());
     }
 
-    @After("logPointCut()")
+    @After("logAllMethods()")
     public void logAfterRequest(JoinPoint joinPoint){
         logger.info("Completed request: "+joinPoint.toString());
     }
 
-    @AfterThrowing("logPointCut()")
+    @AfterThrowing("logAllMethods()")
     public void logAfterExceptionRequest(JoinPoint joinPoint){
         logger.error("Exception thrown in method: "+joinPoint.toString());
     }
 
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-    private void logPointCut(){
-        // Pointcut to log at every RestController method call
+    @Pointcut("within(com.revature..*)")
+    private void logAllMethods(){
+        // Pointcut to log at every method call
     }
-
 }
