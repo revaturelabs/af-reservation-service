@@ -41,6 +41,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.8.0'
 	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.8.0'
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 test {
