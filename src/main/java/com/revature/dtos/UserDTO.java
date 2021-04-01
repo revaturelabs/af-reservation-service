@@ -1,14 +1,14 @@
-package com.revature.entities;
+package com.revature.dtos;
 
-public class User {
+public class UserDTO {
     private int id;
     private String email;
     private String role;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(int id, String email, String role) {
+    public UserDTO(int id, String email, String role) {
         this.id = id;
         this.email = email;
         this.role = role;
@@ -40,7 +40,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +

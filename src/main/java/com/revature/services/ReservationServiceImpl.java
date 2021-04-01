@@ -1,8 +1,8 @@
 package com.revature.services;
 
+import com.revature.dtos.UserDTO;
 import com.revature.entities.Reservation;
 import com.revature.entities.Room;
-import com.revature.entities.User;
 import com.revature.repos.ReservationRepo;
 import com.revature.repos.RoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public Reservation updateReservationTime(Reservation reservation, User user) {
+    public Reservation updateReservationTime(Reservation reservation, UserDTO userDTO) {
         // check to see if old reservation exists
         Reservation old = reservationRepo.findById(reservation.getReservationId()).orElse(null);
         if(old == null) {
@@ -72,8 +72,8 @@ public class ReservationServiceImpl implements ReservationService{
             }
         }
 
-        // check to see if the user owns the reservation and if they're an admin
-        if(!old.getReserver().equals(user.getEmail()) && !user.getRole().equals("admin")) {
+        // check to see if the userDTO owns the reservation and if they're an admin
+        if(!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
         }
 
@@ -88,7 +88,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public Reservation cancelReservation(int reservationId, User user) {
+    public Reservation cancelReservation(int reservationId, UserDTO userDTO) {
         // check to see if old reservation exists
         Reservation old = reservationRepo.findById(reservationId).orElse(null);
         if(old == null) {
@@ -100,8 +100,8 @@ public class ReservationServiceImpl implements ReservationService{
             return old;
         }
 
-        // check to see if the user owns the reservation and if they're an admin
-        if(!old.getReserver().equals(user.getEmail()) && !user.getRole().equals("admin")) {
+        // check to see if the userDTO owns the reservation and if they're an admin
+        if(!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
         }
 
