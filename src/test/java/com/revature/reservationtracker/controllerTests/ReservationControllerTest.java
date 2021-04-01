@@ -29,7 +29,7 @@ public class ReservationControllerTest {
     MockMvc mvc;
 
     @Test
-    void create_reservation() throws Exception{
+    void create_reservation() throws Exception {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         Mockito.when(reservationService.createReservation(any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
@@ -41,7 +41,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    void get_reservations() throws Exception{
+    void get_reservations() throws Exception {
         Mockito.when(reservationService.getActiveReservationsByRoomId(anyInt())).thenReturn(new HashSet<>());
         mvc.perform(MockMvcRequestBuilders
                 .get("/rooms/1/reservations")
@@ -50,7 +50,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    void get_reservation() throws Exception{
+    void get_reservation() throws Exception {
         Mockito.when(reservationService.getReservationById(anyInt())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
                 .get("/rooms/1/reservations/2")
@@ -59,7 +59,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    void cancel_reservations() throws Exception{
+    void cancel_reservations() throws Exception {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         Mockito.when(reservationService.cancelReservation(anyInt(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
@@ -71,7 +71,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    void update_reservations() throws Exception{
+    void update_reservations() throws Exception {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         Mockito.when(reservationService.updateReservationTime(any(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
@@ -81,7 +81,6 @@ public class ReservationControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
 
 
 }

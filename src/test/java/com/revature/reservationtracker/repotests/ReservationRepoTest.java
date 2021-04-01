@@ -15,27 +15,27 @@ public class ReservationRepoTest {
     ReservationRepo reservationRepo;
 
     @Test
-    void find_by_room_id_and_status(){
-       Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatus(1,"reserved");
-       Assertions.assertNotEquals(0,reservations.size());
-       for(Reservation r : reservations) {
-           Assertions.assertEquals("reserved", r.getStatus());
-           Assertions.assertEquals(1, r.getRoomId());
-       }
+    void find_by_room_id_and_status() {
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatus(1, "reserved");
+        Assertions.assertNotEquals(0, reservations.size());
+        for (Reservation r : reservations) {
+            Assertions.assertEquals("reserved", r.getStatus());
+            Assertions.assertEquals(1, r.getRoomId());
+        }
     }
 
     @Test
     void find_by_room_id_and_status_cancelled() {
         Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatus(1, "cancelled");
         Assertions.assertNotEquals(0, reservations.size());
-        for(Reservation r : reservations) {
+        for (Reservation r : reservations) {
             Assertions.assertEquals(1, r.getRoomId());
             Assertions.assertEquals("cancelled", r.getStatus());
         }
     }
 
     @Test
-    void find_conflicts_none(){
+    void find_conflicts_none() {
         Set<Reservation> reservations = reservationRepo.findConflicts(2, 5000, 7000);
         Assertions.assertEquals(0, reservations.size());
     }
