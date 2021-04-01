@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Set;
 
@@ -19,6 +18,7 @@ public class ReservationController {
 
     @Autowired
     ReservationService reservationService;
+
     @PostMapping("/rooms/{roomId}/reservations")
     public ResponseEntity<Reservation> createReservation(@PathVariable int roomId, @RequestBody ReservationDTO reservationDTO){
         Reservation reservation = reservationTransfer(roomId, reservationDTO);
