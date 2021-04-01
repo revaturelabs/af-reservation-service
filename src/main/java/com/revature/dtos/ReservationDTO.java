@@ -1,5 +1,9 @@
 package com.revature.dtos;
 
+/**
+ * Data transfer object that is not persisted and is only meant to take the input from the request body. Has all the same
+ * fields and methods as the entity version
+ */
 public class ReservationDTO {
 
     private int reservationId;
@@ -21,52 +25,16 @@ public class ReservationDTO {
         this.roomId = roomId;
     }
 
-    public int getReservationId() {
-        return reservationId;
-    }
-
-    public void setReservationId(int reservationId) {
-        this.reservationId = reservationId;
-    }
-
-    public String getReserver() {
-        return reserver;
-    }
-
-    public void setReserver(String reserver) {
-        this.reserver = reserver;
-    }
-
     public long getStartTime() {
         return startTime;
-    }
-
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
     }
 
     public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
     }
 
     @Override
