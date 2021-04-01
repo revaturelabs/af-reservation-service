@@ -1,5 +1,6 @@
 package com.revature.reservationtracker.controllerTests;
 
+import com.revature.aspects.SecurityAspect;
 import com.revature.entities.Reservation;
 import com.revature.services.ReservationService;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,9 @@ public class ReservationControllerTest {
 
     @MockBean
     ReservationService reservationService;
+
+    @MockBean
+    SecurityAspect securityAspect;
 
     @Autowired
     MockMvc mvc;

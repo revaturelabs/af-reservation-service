@@ -49,6 +49,7 @@ public class SecurityAspect {
             }
         }catch(Exception e){
             logger.error("Unable to verify JWT");
+            response.sendError(401, "Unable to verify JWT");
         }
         return null;
     }

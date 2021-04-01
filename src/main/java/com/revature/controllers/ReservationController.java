@@ -27,7 +27,6 @@ public class ReservationController {
         reservation.setReservationId(0);
         reservation.setReserver(userDTO.getEmail());
 
-
         reservationService.createReservation(reservation);
         return ResponseEntity.status(201).body(reservation);
     }
