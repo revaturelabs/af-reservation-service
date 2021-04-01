@@ -1,10 +1,12 @@
 # af-reservation-service
-Microservice responsible for reserving space among Revature's digital and physical facilities. Part of the AssignForce suite
+Microservice responsible for reserving space among Revature's digital and physical 
+facilities. Part of the AssignForce suite
 
-## Routes
+## Routes, Requests and Responses
 All requests should have an Authorization header with a valid JWT, and will be rejected 
-otherwise. Most requests return a reservation object or list of reservation objects, each
-of which will be in this form.
+otherwise. Any request that does not have a JWT will be returned a `401 UNAUTHORIZED`. 
+Most requests return a reservation object or list of reservation objects, each of which 
+will be in this form.
 
 ```json
 {
