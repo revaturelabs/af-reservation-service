@@ -21,7 +21,12 @@ public class ReservationController {
 
     @PostMapping("/rooms/{roomId}/reservations")
     public ResponseEntity<Reservation> createReservation(@PathVariable int roomId, @RequestBody ReservationDTO reservationDTO){
+        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
+
         Reservation reservation = reservationTransfer(roomId, reservationDTO);
+        reservation.setReservationId(0);
+        reservation.setReserver(userDTO.getEmail());
+
 
         reservationService.createReservation(reservation);
         return ResponseEntity.status(201).body(reservation);
@@ -29,14 +34,19 @@ public class ReservationController {
 
     @GetMapping("/rooms/{roomId}/reservations")
     public ResponseEntity<Set<Reservation>> getReservations(@PathVariable int roomId){
+        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
+
         Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId);
         return ResponseEntity.status(200).body(reservations);
     }
 
     @GetMapping("/rooms/{roomId}/reservations/{reservationId}")
     public ResponseEntity<Reservation> getReservation(@PathVariable int roomId, @PathVariable int reservationId){
+        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
+
         Reservation reservation = reservationService.getReservationById(reservationId);
         reservation.setRoomId(roomId);
+        reservation.setReserver(userDTO.getEmail());
         return ResponseEntity.status(200).body(reservation);
     }
 
@@ -45,27 +55,28 @@ public class ReservationController {
                                                          @PathVariable int reservationId,
                                                          @RequestParam(name = "action", defaultValue = "") String action,
                                                          @RequestBody ReservationDTO reservationDTO){
-
-        Reservation reservation = reservationTransfer(roomId, reservationDTO);
+        Reservation reservation;
 
         // placeholder
         UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
         if (action.equals("cancel")){
-            reservationService.cancelReservation(reservationId, userDTO);
+            reservation = reservationService.cancelReservation(reservationId, userDTO);
         }
         else {
+            reservation = reservationTransfer(roomId, reservationDTO);
+            reservation.setReserver(userDTO.getEmail());
+            reservation.setReservationId(reservationId);
             reservationService.updateReservationTime(reservation, userDTO);
         }
         return ResponseEntity.status(200).body(reservation);
     }
 
+    // helper method
     public Reservation reservationTransfer(int roomId, ReservationDTO reservationDTO){
         Reservation reservation = new Reservation();
         reservation.setRoomId(roomId);
         reservation.setStartTime(reservationDTO.getStartTime());
         reservation.setEndTime(reservationDTO.getEndTime());
-        reservation.setReservationId(reservationDTO.getRoomId());
-        reservation.setReserver(reservationDTO.getReserver());
         reservation.setStatus(reservationDTO.getStatus());
         return reservation;
     }
