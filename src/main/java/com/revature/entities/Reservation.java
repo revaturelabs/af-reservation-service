@@ -2,27 +2,34 @@ package com.revature.entities;
 
 import javax.persistence.*;
 
+/** Persisted bean for the reservation. Bean is managed by Spring. Mapped to Table reservation in the database */
 @Entity
 @Table(name = "reservation")
 public class Reservation {
 
+    /** Unique reservation id */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
     private int reservationId;
 
+    /** The email of the user reserving the room */
     @Column(name = "reserver")
     private String reserver;
 
+    /** Start time of the reservation */
     @Column(name = "start_time")
     private long startTime;
 
+    /** End time of the reservation */
     @Column(name = "end_time")
     private long endTime;
 
+    /** Status of reservation: 'reserved' | 'canceled' | 'completed' */
     @Column(name = "reservation_status")
     private String status;
 
+    /** Unique Id of the room */
     @JoinColumn(name = "room_id")
     @Column(name = "room_id")
     private int roomId;

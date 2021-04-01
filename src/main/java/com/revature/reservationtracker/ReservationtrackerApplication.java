@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.revature.entities"})
 public class ReservationtrackerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ReservationtrackerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ReservationtrackerApplication.class, args);
+    }
 
 }
