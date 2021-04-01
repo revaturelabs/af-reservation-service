@@ -1,10 +1,11 @@
 package com.revature.reservationtracker.controllerTests;
 
-import com.revature.aspects.SecurityAspect;
 import com.revature.entities.Reservation;
 import com.revature.services.ReservationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashSet;
 
@@ -19,15 +21,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @SpringBootTest(classes = com.revature.reservationtracker.ReservationtrackerApplication.class)
 public class ReservationControllerTest {
 
     @MockBean
     ReservationService reservationService;
-
-    @MockBean
-    SecurityAspect securityAspect;
 
     @Autowired
     MockMvc mvc;
@@ -36,6 +36,7 @@ public class ReservationControllerTest {
     void create_reservation() throws Exception {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         Mockito.when(reservationService.createReservation(any())).thenReturn(new Reservation());
+
         mvc.perform(MockMvcRequestBuilders
                 .post("/rooms/1/reservations")
                 .content(json)
