@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.aspects.Verify;
 import com.revature.dtos.ReservationDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.entities.Reservation;
@@ -27,10 +28,11 @@ public class ReservationController {
      * @param reservationDTO Reservation that is sent in
      * @return the reservation that was created and status
      */
+    @Verify
     @PostMapping("/rooms/{roomId}/reservations")
-    public ResponseEntity<Reservation> createReservation(@PathVariable int roomId, @RequestBody ReservationDTO reservationDTO) {
-        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
-
+    public ResponseEntity<Reservation> createReservation(UserDTO userDTO,
+                                                         @PathVariable int roomId,
+                                                         @RequestBody ReservationDTO reservationDTO) {
         // transfer the DTO into a reservation object
         Reservation reservation = reservationTransfer(roomId, reservationDTO);
         // persist the reserver Id and email of user
@@ -47,11 +49,10 @@ public class ReservationController {
      * @param roomId Unique room id
      * @return The reservations of the specified room and status
      */
+    @Verify
     @GetMapping("/rooms/{roomId}/reservations")
-    public ResponseEntity<Set<Reservation>> getReservations(@PathVariable int roomId) {
-        // placeholder until auth can be set up
-        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
-
+    public ResponseEntity<Set<Reservation>> getReservations(UserDTO userDTO,
+                                                            @PathVariable int roomId) {
         Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId);
         return ResponseEntity.status(200).body(reservations);
     }
@@ -62,10 +63,11 @@ public class ReservationController {
      * @param reservationId Unique the reservation id
      * @return The specified reservation and status
      */
+    @Verify
     @GetMapping("/rooms/{roomId}/reservations/{reservationId}")
-    public ResponseEntity<Reservation> getReservation(@PathVariable int roomId, @PathVariable int reservationId) {
-        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
-
+    public ResponseEntity<Reservation> getReservation(UserDTO userDTO,
+                                                      @PathVariable int roomId,
+                                                      @PathVariable int reservationId) {
         // get reservation By Id
         Reservation reservation = reservationService.getReservationById(reservationId);
         // persist the room id and user email
@@ -83,15 +85,14 @@ public class ReservationController {
      * @param reservationDTO Reservation that is sent in
      * @return The updated reservation and status
      */
+    @Verify
     @PatchMapping("/rooms/{roomId}/reservations/{reservationId}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable int roomId,
+    public ResponseEntity<Reservation> updateReservation(UserDTO userDTO,
+                                                         @PathVariable int roomId,
                                                          @PathVariable int reservationId,
                                                          @RequestParam(name = "action", defaultValue = "") String action,
                                                          @RequestBody ReservationDTO reservationDTO) {
         Reservation reservation; // reservation
-
-        // placeholder until auth can be connected
-        UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
 
         // if the query param is 'cancel'
         if (action.equals("cancel")) {
