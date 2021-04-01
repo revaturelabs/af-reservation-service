@@ -11,67 +11,112 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+/** Handles incoming requests through the specified URIs */
 @Component
 @RestController
 @CrossOrigin
 public class ReservationController {
 
+    /** Reservation Service */
     @Autowired
     ReservationService reservationService;
 
+    /**
+     * Create a reservation in a room
+     * @param roomId Unique room Id
+     * @param reservationDTO Reservation that is sent in
+     * @return the reservation that was created and status
+     */
     @PostMapping("/rooms/{roomId}/reservations")
-    public ResponseEntity<Reservation> createReservation(@PathVariable int roomId, @RequestBody ReservationDTO reservationDTO){
+    public ResponseEntity<Reservation> createReservation(@PathVariable int roomId, @RequestBody ReservationDTO reservationDTO) {
         UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
 
+        // transfer the DTO into a reservation object
         Reservation reservation = reservationTransfer(roomId, reservationDTO);
+        // persist the reserver Id and email of user
         reservation.setReservationId(0);
         reservation.setReserver(userDTO.getEmail());
 
+        // create reservation
         reservationService.createReservation(reservation);
         return ResponseEntity.status(201).body(reservation);
     }
 
+    /**
+     * Get the reservations by room id
+     * @param roomId Unique room id
+     * @return The reservations of the specified room and status
+     */
     @GetMapping("/rooms/{roomId}/reservations")
-    public ResponseEntity<Set<Reservation>> getReservations(@PathVariable int roomId){
+    public ResponseEntity<Set<Reservation>> getReservations(@PathVariable int roomId) {
+        // placeholder until auth can be set up
         UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
 
         Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId);
         return ResponseEntity.status(200).body(reservations);
     }
 
+    /**
+     * Get the reservation with a specified id
+     * @param roomId Room the reservation is in
+     * @param reservationId Unique the reservation id
+     * @return The specified reservation and status
+     */
     @GetMapping("/rooms/{roomId}/reservations/{reservationId}")
-    public ResponseEntity<Reservation> getReservation(@PathVariable int roomId, @PathVariable int reservationId){
+    public ResponseEntity<Reservation> getReservation(@PathVariable int roomId, @PathVariable int reservationId) {
         UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
 
+        // get reservation By Id
         Reservation reservation = reservationService.getReservationById(reservationId);
+        // persist the room id and user email
         reservation.setRoomId(roomId);
         reservation.setReserver(userDTO.getEmail());
+
         return ResponseEntity.status(200).body(reservation);
     }
 
+    /**
+     * Update/patch the necessary data in the database. Query param will cancel the reservation
+     * @param roomId Unique room Id
+     * @param reservationId Unique Reservation Id
+     * @param action Query param (default is "")
+     * @param reservationDTO Reservation that is sent in
+     * @return The updated reservation and status
+     */
     @PatchMapping("/rooms/{roomId}/reservations/{reservationId}")
     public ResponseEntity<Reservation> updateReservation(@PathVariable int roomId,
                                                          @PathVariable int reservationId,
                                                          @RequestParam(name = "action", defaultValue = "") String action,
-                                                         @RequestBody ReservationDTO reservationDTO){
-        Reservation reservation;
+                                                         @RequestBody ReservationDTO reservationDTO) {
+        Reservation reservation; // reservation
 
-        // placeholder
+        // placeholder until auth can be connected
         UserDTO userDTO = new UserDTO(1, "test@email.revature.com", "admin");
-        if (action.equals("cancel")){
+
+        // if the query param is 'cancel'
+        if (action.equals("cancel")) {
             reservation = reservationService.cancelReservation(reservationId, userDTO);
-        }
-        else {
+        } else {
+            // update the reservation
+            // transfer the data into a reservation object
             reservation = reservationTransfer(roomId, reservationDTO);
+            // persist the reserver and id given in path
             reservation.setReserver(userDTO.getEmail());
             reservation.setReservationId(reservationId);
+
+            // update
             reservationService.updateReservationTime(reservation, userDTO);
         }
         return ResponseEntity.status(200).body(reservation);
     }
 
-    // helper method
-    public Reservation reservationTransfer(int roomId, ReservationDTO reservationDTO){
+    /**
+     * Helper method to switch the data transfer object into a Reservation entity object that is persisted
+     * @param roomId Unique room id
+     * @param reservationDTO Reservation that is sent in
+     * @return The new reservation object
+     */
+    public Reservation reservationTransfer(int roomId, ReservationDTO reservationDTO) {
         Reservation reservation = new Reservation();
         reservation.setRoomId(roomId);
         reservation.setStartTime(reservationDTO.getStartTime());
