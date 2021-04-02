@@ -2,6 +2,11 @@
 Microservice responsible for reserving space among Revature's digital and physical 
 facilities. Part of the AssignForce suite
 
+## Environment Variables
+Need to add a `.env` file in this directory  
+It should include ```AUTH_SERVER=http://1.2.3.4:5555```   
+or ```AUTH_SERVER=http://${spring.application.authservice}```
+
 ## Routes, Requests and Responses
 All requests should have an Authorization header with a valid JWT, and will be rejected 
 otherwise. Any request that does not have a JWT will be returned a `401 UNAUTHORIZED`. 
