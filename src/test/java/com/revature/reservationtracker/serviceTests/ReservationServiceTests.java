@@ -187,9 +187,9 @@ public class ReservationServiceTests {
         reservations.add(reservation2);
         reservations.add(reservation3);
 
-        Mockito.when(reservationRepo.findByRoomIdAndStatus(2, "reserved")).thenReturn(reservations);
+        Mockito.when(reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(2, "reserved", Long.MIN_VALUE, Long.MAX_VALUE)).thenReturn(reservations);
 
-        Set<Reservation> returned = service.getActiveReservationsByRoomId(2);
+        Set<Reservation> returned = service.getActiveReservationsByRoomId(2, null, null);
 
         Assertions.assertEquals(3, returned.size());
     }

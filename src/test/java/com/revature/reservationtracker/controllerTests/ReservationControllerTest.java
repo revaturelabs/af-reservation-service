@@ -47,7 +47,7 @@ public class ReservationControllerTest {
 
     @Test
     void get_reservations() throws Exception {
-        Mockito.when(reservationService.getActiveReservationsByRoomId(anyInt())).thenReturn(new HashSet<>());
+        Mockito.when(reservationService.getActiveReservationsByRoomId(anyInt(), any(), any())).thenReturn(new HashSet<>());
         mvc.perform(MockMvcRequestBuilders
                 .get("/rooms/1/reservations")
                 .contentType(MediaType.APPLICATION_JSON))
