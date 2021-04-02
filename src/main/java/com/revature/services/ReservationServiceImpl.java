@@ -107,7 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
         long begin = startRange == null ? Long.MIN_VALUE : startRange;
         long end = endRange == null ? Long.MAX_VALUE : endRange;
         if(begin > end) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal time range given for search range given");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Illegal time range given for search range given");
         }
         return reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(roomId, "reserved", begin, end);
     }
