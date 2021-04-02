@@ -193,4 +193,33 @@ public class ReservationServiceTests {
 
         Assertions.assertEquals(3, returned.size());
     }
+
+    @Test
+    void get_active_reservations_by_room_id_time_range() {
+        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
+        long startTime = System.currentTimeMillis() / 1000L;
+        long endTime = startTime + 3600;
+
+        long startCheck = startTime + 4000;
+        long endCheck = endTime + 5000;
+        Set<Reservation> reservations = new HashSet<>();
+
+        //Reservation reservation1 = new Reservation(1, userDTO.getEmail(), startTime, endTime, "reserved", 2);
+        Reservation reservation2 = new Reservation(2, userDTO.getEmail(), startTime + 4200, endTime + 4200, "reserved", 2);
+        Reservation reservation3 = new Reservation(3, userDTO.getEmail(), startTime + 8000, endTime + 8000, "reserved", 2);
+
+        //reservations.add(reservation1);
+        reservations.add(reservation2);
+        reservations.add(reservation3);
+
+        Mockito.when(reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(2, "reserved", startCheck, endCheck)).thenReturn(reservations);
+
+        Set<Reservation> returned = service.getActiveReservationsByRoomId(2, startCheck, endCheck);
+        Assertions.assertEquals(2, returned.size());
+    }
+
+    @Test
+    void get_active_reservations_by_room_id_invalid_time_range() {
+        Assertions.assertThrows(ResponseStatusException.class, ()-> service.getActiveReservationsByRoomId(2, (long) 5, (long)4));
+    }
 }
