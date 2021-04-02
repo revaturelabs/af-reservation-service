@@ -103,8 +103,13 @@ public class ReservationServiceImpl implements ReservationService {
      * @return Set of the reserved rooms
      */
     @Override
-    public Set<Reservation> getActiveReservationsByRoomId(int roomId) {
-        return reservationRepo.findByRoomIdAndStatus(roomId, "reserved");
+    public Set<Reservation> getActiveReservationsByRoomId(int roomId, Long startRange, Long endRange) {
+        long begin = startRange == null ? Long.MIN_VALUE : startRange;
+        long end = endRange == null ? Long.MAX_VALUE : endRange;
+        if(begin > end) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal time range given for search range given");
+        }
+        return reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(roomId, "reserved", begin, end);
     }
 
     /**

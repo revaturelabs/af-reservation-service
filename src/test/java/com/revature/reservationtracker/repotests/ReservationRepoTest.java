@@ -16,7 +16,7 @@ public class ReservationRepoTest {
 
     @Test
     void find_by_room_id_and_status() {
-        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatus(1, "reserved");
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(1, "reserved", Long.MIN_VALUE,Long.MAX_VALUE);
         Assertions.assertNotEquals(0, reservations.size());
         for (Reservation r : reservations) {
             Assertions.assertEquals("reserved", r.getStatus());
@@ -26,11 +26,48 @@ public class ReservationRepoTest {
 
     @Test
     void find_by_room_id_and_status_cancelled() {
-        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatus(1, "cancelled");
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(1, "cancelled", Long.MIN_VALUE, Long.MAX_VALUE);
         Assertions.assertNotEquals(0, reservations.size());
         for (Reservation r : reservations) {
             Assertions.assertEquals(1, r.getRoomId());
             Assertions.assertEquals("cancelled", r.getStatus());
+        }
+    }
+
+    @Test
+    void find_by_room_id_and_status_with_time_range() {
+        long start = -5;
+        long end = 10000;
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(1, "reserved", start, end);
+        Assertions.assertNotEquals(0, reservations.size());
+        for (Reservation r : reservations) {
+            Assertions.assertEquals("reserved", r.getStatus());
+            Assertions.assertEquals(1, r.getRoomId());
+            Assertions.assertTrue((r.getStartTime() < end && r.getStartTime() > start) || (r.getEndTime() < end && r.getEndTime() > start));
+        }
+    }
+
+    @Test
+    void find_by_room_id_and_status_with_time_range_no_begin() {
+        long end = 10000;
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(1, "reserved", Long.MIN_VALUE, end);
+        Assertions.assertNotEquals(0, reservations.size());
+        for (Reservation r : reservations) {
+            Assertions.assertEquals("reserved", r.getStatus());
+            Assertions.assertEquals(1, r.getRoomId());
+            Assertions.assertTrue(r.getStartTime() < end || r.getEndTime() < end);
+        }
+    }
+
+    @Test
+    void find_by_room_id_and_status_with_time_range_no_end() {
+        long start = -5;
+        Set<Reservation> reservations = reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(1, "reserved", start, Long.MAX_VALUE);
+        Assertions.assertNotEquals(0, reservations.size());
+        for (Reservation r : reservations) {
+            Assertions.assertEquals("reserved", r.getStatus());
+            Assertions.assertEquals(1, r.getRoomId());
+            Assertions.assertTrue(r.getStartTime() > start || r.getEndTime() > start);
         }
     }
 

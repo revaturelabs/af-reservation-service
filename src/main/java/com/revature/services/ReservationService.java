@@ -11,7 +11,7 @@ public interface ReservationService {
 
     Reservation updateReservationTime(Reservation reservation, UserDTO userDTO);
 
-    Set<Reservation> getActiveReservationsByRoomId(int roomId);
+    Set<Reservation> getActiveReservationsByRoomId(int roomId, Long startRange, Long endRange);
 
     Reservation cancelReservation(int reservationId, UserDTO userDTO);
 

@@ -47,13 +47,17 @@ public class ReservationController {
     /**
      * Get the reservations by room id
      * @param roomId Unique room id
+     * @param begin Specify the earliest time to return reservations
+     * @param end Specify the latest time to return reservations
      * @return The reservations of the specified room and status
      */
     @Verify
     @GetMapping("/rooms/{roomId}/reservations")
     public ResponseEntity<Set<Reservation>> getReservations(UserDTO userDTO,
-                                                            @PathVariable int roomId) {
-        Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId);
+                                                            @PathVariable int roomId,
+                                                            @RequestParam(name = "start", required = false) Long begin,
+                                                            @RequestParam(name = "end", required = false) Long end) {
+        Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId, begin, end);
         return ResponseEntity.status(200).body(reservations);
     }
 
