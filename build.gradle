@@ -42,6 +42,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.8.0'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.8.0'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-all', version: '3.0.2'
+
+
 }
 
 test {

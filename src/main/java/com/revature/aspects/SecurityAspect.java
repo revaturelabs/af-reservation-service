@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,6 +26,9 @@ public class SecurityAspect {
         return System.getenv(key);
     }
 
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
     @Around("controllerMethodsPointCut()")
     public Object verifyJwt(ProceedingJoinPoint pjp) throws Throwable {
         // PRODUCTION CODE
@@ -32,11 +36,12 @@ public class SecurityAspect {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         String auth = request.getHeader("Authorization");
 
-        WebClient webClient = WebClient.create(this.getEnv("AUTH_SERVER"));
+        //WebClient webClient = WebClient.create("http://auth-service");
+
         try{
             logger.info("TEST TEST");
-            UserDTO userDTO = webClient
-                    .post().uri("/verify")
+            UserDTO userDTO = webClientBuilder.build()
+                    .post().uri("http://auth-service/verify")
                     .body(Mono.just(auth), String.class)
                     .retrieve()
                     .onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
