@@ -110,7 +110,7 @@ public class ReservationController {
             reservation.setReservationId(reservationId);
 
             // update
-            reservationService.updateReservationTime(reservation, userDTO);
+            reservationService.updateReservation(reservation, userDTO);
         }
         return ResponseEntity.status(200).body(reservation);
     }
@@ -127,6 +127,7 @@ public class ReservationController {
         reservation.setStartTime(reservationDTO.getStartTime());
         reservation.setEndTime(reservationDTO.getEndTime());
         reservation.setStatus(reservationDTO.getStatus());
+        reservation.setTitle(reservationDTO.getTitle());
         return reservation;
     }
 

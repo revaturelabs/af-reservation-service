@@ -130,7 +130,7 @@ public class ReservationControllerTest {
     @Test
     void update_reservations() throws Exception {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
-        when(reservationService.updateReservationTime(any(), any())).thenReturn(new Reservation());
+        Mockito.when(reservationService.updateReservation(any(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
                 .patch("/rooms/1/reservations/2")
                 .header("Authorization",jwt)

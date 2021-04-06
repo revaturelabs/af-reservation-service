@@ -23,11 +23,11 @@ public class Room {
 
     /** Unique building id */
     @JoinColumn(name = "building_id")
-    @Column(name = "building_id")
+    @Column(name = "bld_id")
     private int buildingId;
 
     /** max room occupancy */
-    @Column(name = "room_capacity")
+    @Column(name = "capacity")
     private int capacity;
 
     public Room() {

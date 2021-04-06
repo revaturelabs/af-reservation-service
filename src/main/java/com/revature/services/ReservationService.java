@@ -9,7 +9,7 @@ import java.util.Set;
 public interface ReservationService {
     Reservation createReservation(Reservation reservation);
 
-    Reservation updateReservationTime(Reservation reservation, UserDTO userDTO);
+    Reservation updateReservation(Reservation reservation, UserDTO userDTO);
 
     Set<Reservation> getActiveReservationsByRoomId(int roomId, Long startRange, Long endRange);
 
