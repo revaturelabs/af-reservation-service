@@ -13,6 +13,9 @@ public class Reservation {
     @Column(name = "reservation_id")
     private int reservationId;
 
+    @Column(name = "reservation_title")
+    private String title;
+
     /** The email of the user reserving the room */
     @Column(name = "reserver")
     private String reserver;
@@ -37,13 +40,14 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int reservationId, String reserver, long startTime, long endTime, String status, int roomId) {
+    public Reservation(int reservationId, String reserver, long startTime, long endTime, String status, int roomId, String title) {
         this.reservationId = reservationId;
         this.reserver = reserver;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
         this.roomId = roomId;
+        this.title = title;
     }
 
     public int getReservationId() {
@@ -94,6 +98,14 @@ public class Reservation {
         this.roomId = roomId;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -103,6 +115,7 @@ public class Reservation {
                 ", endTime=" + endTime +
                 ", status='" + status + '\'' +
                 ", roomId=" + roomId +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

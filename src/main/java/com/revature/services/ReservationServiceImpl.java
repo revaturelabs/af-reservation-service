@@ -38,6 +38,10 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such Room");
         }
 
+        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation must have a title");
+        }
+
         // check to make sure the times given are valid
         if (reservation.getStartTime() > reservation.getEndTime()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
@@ -62,16 +66,33 @@ public class ReservationServiceImpl implements ReservationService {
      * @return Updated reservation
      */
     @Override
-    public Reservation updateReservationTime(Reservation reservation, UserDTO userDTO) {
+    public Reservation updateReservation(Reservation reservation, UserDTO userDTO) {
         // check to see if old reservation exists
         Reservation old = reservationRepo.findById(reservation.getReservationId()).orElse(null);
         if (old == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation to update");
         }
 
+        if(reservation.getStartTime() == 0) {
+            reservation.setStartTime(old.getStartTime());
+        }
+
+        if(reservation.getEndTime() == 0) {
+            reservation.setEndTime(old.getEndTime());
+        }
+
         // check to make sure the times given are valid
         if (reservation.getStartTime() > reservation.getEndTime()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
+        }
+
+        // check to see if the userDTO owns the reservation and if they're an admin
+        if (!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
+        }
+
+        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+            reservation.setTitle(old.getTitle());
         }
 
         // check to make sure there isn't a conflict with other reservations
@@ -85,11 +106,6 @@ public class ReservationServiceImpl implements ReservationService {
             if (conflicts.size() > 1) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Attempting to create reservation with conflicting time");
             }
-        }
-
-        // check to see if the userDTO owns the reservation and if they're an admin
-        if (!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
         }
 
         reservation.setRoomId(old.getRoomId());
