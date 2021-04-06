@@ -112,4 +112,11 @@ public class ReservationRepoTest {
         Assertions.assertNotEquals(0, reservations.size());
         System.out.println(reservations);
     }
+
+    @Test
+    void get_all_reservations_by_reserver(){
+        Set<Reservation> reservations = reservationRepo.findAllByReserver("trainer1@revature.email");
+        Assertions.assertNotEquals(0, reservations.size());
+        System.out.println(reservations);
+    }
 }

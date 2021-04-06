@@ -16,4 +16,6 @@ public interface ReservationService {
     Reservation cancelReservation(int reservationId, UserDTO userDTO);
 
     Reservation getReservationById(int reservationId);
+
+    Set<Reservation> getReservationsByReserver(String reserver);
 }

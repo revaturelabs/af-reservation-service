@@ -139,4 +139,15 @@ public class ReservationControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void get_reservation_by_reserver() throws Exception {
+        Mockito.when(reservationService.getReservationsByReserver(anyString())).thenReturn(new HashSet<>());
+        mvc.perform(MockMvcRequestBuilders
+                .get("/rooms/1/reservations?reserver=trainer1@revature.email")
+                .header("Authorization",jwt)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
 }

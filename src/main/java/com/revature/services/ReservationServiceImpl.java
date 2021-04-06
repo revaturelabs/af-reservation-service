@@ -167,4 +167,9 @@ public class ReservationServiceImpl implements ReservationService {
         if (reservation == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation");
         return reservation;
     }
+
+    @Override
+    public Set<Reservation> getReservationsByReserver(String reserver){
+        return reservationRepo.findAllByReserver(reserver);
+    }
 }
