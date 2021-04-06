@@ -56,8 +56,14 @@ public class ReservationController {
     public ResponseEntity<Set<Reservation>> getReservations(UserDTO userDTO,
                                                             @PathVariable int roomId,
                                                             @RequestParam(name = "start", required = false) Long begin,
-                                                            @RequestParam(name = "end", required = false) Long end) {
-        Set<Reservation> reservations = reservationService.getActiveReservationsByRoomId(roomId, begin, end);
+                                                            @RequestParam(name = "end", required = false) Long end,
+                                                            @RequestParam(name = "reserver", required = false) String reserver) {
+        Set<Reservation> reservations;
+        if(reserver == null){
+            reservations = reservationService.getActiveReservationsByRoomId(roomId, begin, end);
+        } else {
+            reservations = reservationService.getReservationsByReserver(reserver);
+        }
         return ResponseEntity.status(200).body(reservations);
     }
 
