@@ -100,6 +100,25 @@ public class ReservationServiceTests {
     }
 
     @Test
+    void update_reservation_title() {
+        Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
+        long startTime = System.currentTimeMillis() / 1000L;
+        long endTime = startTime + 3600;
+        Reservation reservation = new Reservation(1, userDTO.getEmail(), startTime, endTime, "reserved", 2, "test title");
+
+        Mockito.when(reservationRepo.findById(anyInt())).thenReturn(Optional.of(reservation));
+
+        Reservation update = new Reservation(1, userDTO.getEmail(), startTime, endTime, "canceled", 4, "updated title");
+
+        Reservation updated = service.updateReservation(update, userDTO);
+        Assertions.assertEquals(startTime, updated.getStartTime());
+        Assertions.assertEquals(endTime, updated.getEndTime());
+        Assertions.assertEquals(2, updated.getRoomId());
+        Assertions.assertEquals("reserved", updated.getStatus());
+        Assertions.assertEquals("updated title", updated.getTitle());
+    }
+
+    @Test
     void updated_reservation_time_invalid_times() {
         Mockito.when(reservationRepo.save(any())).then(returnsFirstArg());
         long startTime = System.currentTimeMillis() / 1000L;

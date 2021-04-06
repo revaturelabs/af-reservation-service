@@ -73,6 +73,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation to update");
         }
 
+        if(reservation.getStartTime() == 0) {
+            reservation.setStartTime(old.getStartTime());
+        }
+
+        if(reservation.getEndTime() == 0) {
+            reservation.setEndTime(old.getEndTime());
+        }
+
         // check to make sure the times given are valid
         if (reservation.getStartTime() > reservation.getEndTime()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
