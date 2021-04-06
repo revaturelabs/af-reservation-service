@@ -6,9 +6,11 @@ import com.revature.dtos.UserDTO;
 import com.revature.entities.Reservation;
 import com.revature.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
@@ -102,6 +104,10 @@ public class ReservationController {
         if (action.equals("cancel")) {
             reservation = reservationService.cancelReservation(reservationId, userDTO);
         } else {
+            //check if body was provided
+            if(reservationDTO == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Must provided update body");
+            }
             // update the reservation
             // transfer the data into a reservation object
             reservation = reservationTransfer(roomId, reservationDTO);
@@ -110,7 +116,7 @@ public class ReservationController {
             reservation.setReservationId(reservationId);
 
             // update
-            reservationService.updateReservationTime(reservation, userDTO);
+            reservationService.updateReservation(reservation, userDTO);
         }
         return ResponseEntity.status(200).body(reservation);
     }
@@ -127,6 +133,7 @@ public class ReservationController {
         reservation.setStartTime(reservationDTO.getStartTime());
         reservation.setEndTime(reservationDTO.getEndTime());
         reservation.setStatus(reservationDTO.getStatus());
+        reservation.setTitle(reservationDTO.getTitle());
         return reservation;
     }
 

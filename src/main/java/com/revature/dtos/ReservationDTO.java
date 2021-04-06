@@ -12,6 +12,7 @@ public class ReservationDTO {
     private long endTime;
     private String status;
     private int roomId;
+    private String title;
 
     public ReservationDTO() {
     }
@@ -35,6 +36,10 @@ public class ReservationDTO {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     @Override
