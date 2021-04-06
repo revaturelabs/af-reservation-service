@@ -17,8 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,9 +88,10 @@ public class ReservationControllerTest {
 
     @Test
     void get_reservation_by_reserver() throws Exception {
-        Mockito.when(reservationService.getActiveReservationsByRoomId(anyInt(), any(), any())).thenReturn(new HashSet<>());
+        Mockito.when(reservationService.getReservationsByReserver(anyString())).thenReturn(new HashSet<>());
         mvc.perform(MockMvcRequestBuilders
                 .get("/rooms/1/reservations?reserver=trainer1@revature.email")
+                .header("Authorization",jwt)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
