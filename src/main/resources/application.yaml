@@ -16,6 +16,6 @@ spring:
         healthCheckPath: /health
         health-check-interval: 120s
 server:
-  port: 8081
+  port: 8080
 #server:
 #  port: 9000
