@@ -143,4 +143,8 @@ public class ReservationController {
         return reservation;
     }
 
+    @GetMapping("/health")
+    public boolean health() {
+        return true;
+    }
 }
