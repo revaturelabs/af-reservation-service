@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /** Implementation of the service */
@@ -114,19 +116,38 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /**
-     * Get all the reservations that are reserved
+     * Get all the reservations that are reserved given filter params
      * @param roomId Unique room id
+     * @param start Start time
+     * @param end End time
+     * @param reserver Reserver email
+     * @param status Reservation status
      * @return Set of the reserved rooms
      */
     @Override
-    public Set<Reservation> getActiveReservationsByRoomId(int roomId, Long startRange, Long endRange) {
-        long begin = startRange == null ? Long.MIN_VALUE : startRange;
-        long end = endRange == null ? Long.MAX_VALUE : endRange;
-        if(begin > end) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Illegal time range given for search range given");
+    public Set<Reservation> getCustomReservations(Integer roomId, Long start, Long end, String reserver, String status){
+        Set<Reservation> reservations;
+        long beginTime = start == null ? Long.MIN_VALUE:start;
+        long endTime = end == null ? Long.MAX_VALUE:end;
+        if (beginTime > endTime){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid time range given.");
         }
-        return reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(roomId, "reserved", begin, end);
+        reservations = new HashSet<Reservation>((Collection<? extends Reservation>) reservationRepo.findByTimeRange(beginTime, endTime));
+
+        for (Reservation reservation: reservations){
+            if (roomId != null && reservation.getRoomId() != roomId){
+                reservations.remove(reservation);
+            }
+            else if (status != null && !reservation.getStatus().equals(status)){
+                reservations.remove(reservation);
+            }
+            else if (reserver != null && !reservation.getReserver().equals(reserver)){
+                reservations.remove(reservation);
+            }
+        }
+        return reservations;
     }
+
 
     /**
      * Cancel the reservation for that time frame
@@ -166,10 +187,5 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepo.findById(reservationId).orElse(null);
         if (reservation == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation");
         return reservation;
-    }
-
-    @Override
-    public Set<Reservation> getReservationsByReserver(String reserver){
-        return reservationRepo.findAllByReserver(reserver);
     }
 }

@@ -17,13 +17,14 @@ public class ReservationDTO {
     public ReservationDTO() {
     }
 
-    public ReservationDTO(int reservationId, String reserver, long startTime, long endTime, String status, int roomId) {
+    public ReservationDTO(int reservationId, String reserver, long startTime, long endTime, String status, int roomId, String title) {
         this.reservationId = reservationId;
         this.reserver = reserver;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
         this.roomId = roomId;
+        this.title = title;
     }
 
     public long getStartTime() {
@@ -36,6 +37,10 @@ public class ReservationDTO {
 
     public String getStatus() {
         return status;
+    }
+
+    public int getRoomId() {
+        return roomId;
     }
 
     public String getTitle() {

@@ -26,17 +26,15 @@ public class ReservationController {
 
     /**
      * Create a reservation in a room
-     * @param roomId Unique room Id
      * @param reservationDTO Reservation that is sent in
      * @return the reservation that was created and status
      */
     @Verify
-    @PostMapping("/rooms/{roomId}/reservations")
+    @PostMapping("/reservations")
     public ResponseEntity<Reservation> createReservation(UserDTO userDTO,
-                                                         @PathVariable int roomId,
                                                          @RequestBody ReservationDTO reservationDTO) {
         // transfer the DTO into a reservation object
-        Reservation reservation = reservationTransfer(roomId, reservationDTO);
+        Reservation reservation = reservationTransfer(reservationDTO);
         // persist the reserver Id and email of user
         reservation.setReservationId(0);
         reservation.setReserver(userDTO.getEmail());
@@ -49,41 +47,37 @@ public class ReservationController {
     /**
      * Get the reservations by room id
      * @param roomId Unique room id
-     * @param begin Specify the earliest time to return reservations
+     * @param start Specify the earliest time to return reservations
      * @param end Specify the latest time to return reservations
-     * @return The reservations of the specified room and status
+     * @param reserver Specify the reserver to be filtered for in reservations
+     * @param status Specify the status to be filtered for in reservations
+     * @return The reservations of the specified room, time, reserver, and/or status
      */
     @Verify
-    @GetMapping("/rooms/{roomId}/reservations")
+    @GetMapping("/reservations")
     public ResponseEntity<Set<Reservation>> getReservations(UserDTO userDTO,
-                                                            @PathVariable int roomId,
-                                                            @RequestParam(name = "start", required = false) Long begin,
+                                                            @RequestParam(name = "roomId", required = false) Integer roomId,
+                                                            @RequestParam(name = "start", required = false) Long start,
                                                             @RequestParam(name = "end", required = false) Long end,
-                                                            @RequestParam(name = "reserver", required = false) String reserver) {
+                                                            @RequestParam(name = "reserver", required = false) String reserver,
+                                                            @RequestParam(name = "status", required = false) String status) {
         Set<Reservation> reservations;
-        if(reserver == null){
-            reservations = reservationService.getActiveReservationsByRoomId(roomId, begin, end);
-        } else {
-            reservations = reservationService.getReservationsByReserver(reserver);
-        }
+        reservations = reservationService.getCustomReservations(roomId, start, end, reserver, status);
         return ResponseEntity.status(200).body(reservations);
     }
 
     /**
      * Get the reservation with a specified id
-     * @param roomId Room the reservation is in
      * @param reservationId Unique the reservation id
      * @return The specified reservation and status
      */
     @Verify
-    @GetMapping("/rooms/{roomId}/reservations/{reservationId}")
+    @GetMapping("/reservations/{reservationId}")
     public ResponseEntity<Reservation> getReservation(UserDTO userDTO,
-                                                      @PathVariable int roomId,
                                                       @PathVariable int reservationId) {
         // get reservation By Id
         Reservation reservation = reservationService.getReservationById(reservationId);
         // persist the room id and user email
-        reservation.setRoomId(roomId);
         reservation.setReserver(userDTO.getEmail());
 
         return ResponseEntity.status(200).body(reservation);
@@ -91,16 +85,14 @@ public class ReservationController {
 
     /**
      * Update/patch the necessary data in the database. Query param will cancel the reservation
-     * @param roomId Unique room Id
      * @param reservationId Unique Reservation Id
      * @param action Query param (default is "")
      * @param reservationDTO Reservation that is sent in
      * @return The updated reservation and status
      */
     @Verify
-    @PatchMapping("/rooms/{roomId}/reservations/{reservationId}")
+    @PatchMapping("/reservations/{reservationId}")
     public ResponseEntity<Reservation> updateReservation(UserDTO userDTO,
-                                                         @PathVariable int roomId,
                                                          @PathVariable int reservationId,
                                                          @RequestParam(name = "action", defaultValue = "") String action,
                                                          @RequestBody ReservationDTO reservationDTO) {
@@ -116,7 +108,7 @@ public class ReservationController {
             }
             // update the reservation
             // transfer the data into a reservation object
-            reservation = reservationTransfer(roomId, reservationDTO);
+            reservation = reservationTransfer(reservationDTO);
             // persist the reserver and id given in path
             reservation.setReserver(userDTO.getEmail());
             reservation.setReservationId(reservationId);
@@ -129,13 +121,12 @@ public class ReservationController {
 
     /**
      * Helper method to switch the data transfer object into a Reservation entity object that is persisted
-     * @param roomId Unique room id
      * @param reservationDTO Reservation that is sent in
      * @return The new reservation object
      */
-    public Reservation reservationTransfer(int roomId, ReservationDTO reservationDTO) {
+    public Reservation reservationTransfer(ReservationDTO reservationDTO) {
         Reservation reservation = new Reservation();
-        reservation.setRoomId(roomId);
+        reservation.setRoomId(reservationDTO.getRoomId());
         reservation.setStartTime(reservationDTO.getStartTime());
         reservation.setEndTime(reservationDTO.getEndTime());
         reservation.setStatus(reservationDTO.getStatus());
