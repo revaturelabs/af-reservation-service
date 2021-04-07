@@ -39,7 +39,7 @@ jobs:
 
     - name: Publish
       run: |
-        docker tag assignforce-auth "$GCR_REPO"/"$GCR_PROJECT"/"$IMAGE"
+        docker tag assignforce-reservation "$GCR_REPO"/"$GCR_PROJECT"/"$IMAGE"
         docker push "$GCR_REPO"/"$GCR_PROJECT"/"$IMAGE"
         
         
