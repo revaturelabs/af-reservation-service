@@ -11,11 +11,9 @@ public interface ReservationService {
 
     Reservation updateReservation(Reservation reservation, UserDTO userDTO);
 
-    Set<Reservation> getActiveReservationsByRoomId(int roomId, Long startRange, Long endRange);
-
     Reservation cancelReservation(int reservationId, UserDTO userDTO);
 
     Reservation getReservationById(int reservationId);
 
-    Set<Reservation> getReservationsByReserver(String reserver);
+    Set<Reservation> getCustomReservations(Integer roomId, Long start, Long end, String reserver, String status);
 }

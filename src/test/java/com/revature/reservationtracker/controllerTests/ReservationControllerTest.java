@@ -85,7 +85,7 @@ public class ReservationControllerTest {
         when(reservationService.createReservation(any())).thenReturn(new Reservation());
 
         mvc.perform(MockMvcRequestBuilders
-                .post("/rooms/1/reservations")
+                .post("/reservations")
                 .header("Authorization",jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -95,10 +95,10 @@ public class ReservationControllerTest {
 
     @Test
     void get_reservations() throws Exception {
-        Mockito.when(reservationService.getActiveReservationsByRoomId(anyInt(), any(), any())).thenReturn(new HashSet<>());
+        Mockito.when(reservationService.getCustomReservations(anyInt(), any(), any(), any(), any())).thenReturn(new HashSet<>());
 
         mvc.perform(MockMvcRequestBuilders
-                .get("/rooms/1/reservations")
+                .get("/reservations?roomId=1")
                 .header("Authorization",jwt)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -108,7 +108,7 @@ public class ReservationControllerTest {
     void get_reservation() throws Exception {
         when(reservationService.getReservationById(anyInt())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
-                .get("/rooms/1/reservations/2")
+                .get("/reservations/2")
                 .header("Authorization",jwt)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -119,7 +119,7 @@ public class ReservationControllerTest {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         when(reservationService.cancelReservation(anyInt(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
-                .patch("/rooms/1/reservations/2?action='cancel'")
+                .patch("/reservations/2?action='cancel'")
                 .header("Authorization",jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -132,21 +132,11 @@ public class ReservationControllerTest {
         String json = "{\"roomId\":\"1\", \"name\":\"John Doe\", \"type\":\"meeting\", \"buildingId\":0, \"capacity\":\"5\"}";
         Mockito.when(reservationService.updateReservation(any(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
-                .patch("/rooms/1/reservations/2")
+                .patch("/reservations/2")
                 .header("Authorization",jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void get_reservation_by_reserver() throws Exception {
-        Mockito.when(reservationService.getReservationsByReserver(anyString())).thenReturn(new HashSet<>());
-        mvc.perform(MockMvcRequestBuilders
-                .get("/rooms/1/reservations?reserver=trainer1@revature.email")
-                .header("Authorization",jwt)
-                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
