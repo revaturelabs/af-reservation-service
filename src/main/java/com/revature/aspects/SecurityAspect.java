@@ -41,6 +41,7 @@ public class SecurityAspect {
         try{
             logger.info("TEST TEST");
             UserDTO userDTO = webClientBuilder.build()
+                    // This uses the auth service from consul
                     .post().uri("http://auth-service/verify")
                     .body(Mono.just(auth), String.class)
                     .retrieve()
