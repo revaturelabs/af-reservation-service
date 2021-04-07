@@ -206,9 +206,9 @@ public class ReservationServiceTests {
         reservations.add(reservation2);
         reservations.add(reservation3);
 
-        Mockito.when(reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(2, "reserved", Long.MIN_VALUE, Long.MAX_VALUE)).thenReturn(reservations);
+        Mockito.when(reservationRepo.findByTimeRange(Long.MIN_VALUE, Long.MAX_VALUE)).thenReturn(reservations);
 
-        Set<Reservation> returned = service.getActiveReservationsByRoomId(2, null, null);
+        Set<Reservation> returned = service.getCustomReservations(null, null, null, null, null);
 
         Assertions.assertEquals(3, returned.size());
     }
@@ -231,14 +231,14 @@ public class ReservationServiceTests {
         reservations.add(reservation2);
         reservations.add(reservation3);
 
-        Mockito.when(reservationRepo.findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(2, "reserved", startCheck, endCheck)).thenReturn(reservations);
+        Mockito.when(reservationRepo.findByTimeRange(startCheck, endCheck)).thenReturn(reservations);
 
-        Set<Reservation> returned = service.getActiveReservationsByRoomId(2, startCheck, endCheck);
+        Set<Reservation> returned = service.getCustomReservations(2, startCheck, endCheck, userDTO.getEmail(), "reserved");
         Assertions.assertEquals(2, returned.size());
     }
 
     @Test
     void get_active_reservations_by_room_id_invalid_time_range() {
-        Assertions.assertThrows(ResponseStatusException.class, ()-> service.getActiveReservationsByRoomId(2, (long) 5, (long)4));
+        Assertions.assertThrows(ResponseStatusException.class, ()-> service.getCustomReservations(2, (long) 5, (long)4, null, null));
     }
 }

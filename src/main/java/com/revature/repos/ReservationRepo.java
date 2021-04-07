@@ -13,13 +13,10 @@ import java.util.Set;
 @Repository
 public interface ReservationRepo extends CrudRepository<Reservation, Integer> {
     /** Gets all the reservation in a room of a certain status where the start and end times are within a specific range */
-    @Query("select r from Reservation r WHERE r.roomId = ?1 and r.status = ?2 and ((r.startTime >= ?3 and r.startTime <= ?4) or (r.endTime >= ?3 and r.endTime <= ?4))")
-    Set<Reservation> findByRoomIdAndStatusWhereStartTimeBetweenOrEndTimeBetween(int roomId, String status, long startTime, long endTime);
+    @Query("select r from Reservation r WHERE ((r.startTime >= ?1 and r.startTime <= ?2) or (r.endTime >= ?1 and r.endTime <= ?2))")
+    Set<Reservation> findByTimeRange(long startTime, long endTime);
 
     /** Find the conflicts in a time space */
     @Query("select r from Reservation r WHERE r.status = 'reserved' and r.roomId = ?1 and ((r.startTime < ?2 and ?2 < r.endTime) or (?2 < r.startTime and r.startTime < ?3))")
     Set<Reservation> findConflicts(int roomId, long start, long end);
-
-    /** Get all reservations by reserver */
-    Set<Reservation> findAllByReserver(String reserver);
 }
