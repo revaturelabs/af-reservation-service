@@ -16,13 +16,13 @@ public class ReservationRepoTest {
 
     @Test
     void find_by_time_range_all() {
-        Set<Reservation> reservations = reservationRepo.findByTimeRange(Long.MIN_VALUE,Long.MAX_VALUE);
+        Set<Reservation> reservations = reservationRepo.findByTimeRange(Long.MIN_VALUE, Long.MAX_VALUE);
         Assertions.assertTrue(reservations.size() == 6);
     }
 
     @Test
-    void find_by_time_range(){
-        Set<Reservation> reservations = reservationRepo.findByTimeRange(3601,Long.MAX_VALUE);
+    void find_by_time_range() {
+        Set<Reservation> reservations = reservationRepo.findByTimeRange(3601, Long.MAX_VALUE);
         Assertions.assertTrue(reservations.size() == 5);
     }
 
