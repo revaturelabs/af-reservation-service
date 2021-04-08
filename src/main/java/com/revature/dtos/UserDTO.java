@@ -5,9 +5,13 @@ package com.revature.dtos;
  * all the same fields and methods as the version the Authorization service will send over.
  */
 public class UserDTO {
-    private final int id;
-    private final String email;
-    private final String role;
+    private int id;
+    private String email;
+    private String role;
+
+    public UserDTO(){
+
+    }
 
     public UserDTO(int id, String email, String role) {
         this.id = id;
