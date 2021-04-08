@@ -9,7 +9,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,13 +21,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,7 +60,7 @@ public class ReservationControllerTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .post("/reservations")
-                .header("Authorization",jwt)
+                .header("Authorization", jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -77,7 +73,7 @@ public class ReservationControllerTest {
 
         mvc.perform(MockMvcRequestBuilders
                 .get("/reservations?roomId=1")
-                .header("Authorization",jwt)
+                .header("Authorization", jwt)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -87,7 +83,7 @@ public class ReservationControllerTest {
         when(reservationService.getReservationById(anyInt())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
                 .get("/reservations/2")
-                .header("Authorization",jwt)
+                .header("Authorization", jwt)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -98,7 +94,7 @@ public class ReservationControllerTest {
         when(reservationService.cancelReservation(anyInt(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
                 .patch("/reservations/2?action='cancel'")
-                .header("Authorization",jwt)
+                .header("Authorization", jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -111,7 +107,7 @@ public class ReservationControllerTest {
         Mockito.when(reservationService.updateReservation(any(), any())).thenReturn(new Reservation());
         mvc.perform(MockMvcRequestBuilders
                 .patch("/reservations/2")
-                .header("Authorization",jwt)
+                .header("Authorization", jwt)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

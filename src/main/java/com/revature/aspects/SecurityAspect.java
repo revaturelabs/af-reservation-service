@@ -32,7 +32,7 @@ public class SecurityAspect {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         String auth = request.getHeader("Authorization");
 
-        try{
+        try {
             UserDTO userDTO = webClientBuilder.build()
                     // This uses the auth service from consul
                     .post().uri(System.getenv("AUTH_SERVER"))
@@ -45,14 +45,14 @@ public class SecurityAspect {
                             })
                     .bodyToMono(UserDTO.class).block();
             logger.info(userDTO);
-            if (userDTO.getId() != 0){
+            if (userDTO.getId() != 0) {
                 logger.info("JWT verified: " + userDTO);
                 Object[] args = pjp.getArgs();
                 args[0] = userDTO;
                 Object obj = pjp.proceed();
                 return obj;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Unable to verify JWT: " + e.getMessage());
             response.sendError(401, "Unable to verify JWT");
         }
@@ -60,5 +60,6 @@ public class SecurityAspect {
     }
 
     @Pointcut("@annotation(com.revature.aspects.Verify)")
-    private void controllerMethodsPointCut(){}
+    private void controllerMethodsPointCut() {
+    }
 }

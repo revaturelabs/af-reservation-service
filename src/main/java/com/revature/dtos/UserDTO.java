@@ -1,8 +1,8 @@
 package com.revature.dtos;
 
 /**
- * Data transfer object that is not persisted and is only meant to take the input from the authorization service.
- * Has all the same fields and methods as the version the Authorization service will send over.
+ * Data transfer object that is not persisted and is only meant to take the input from the authorization service. Has
+ * all the same fields and methods as the version the Authorization service will send over.
  */
 public class UserDTO {
     private int id;

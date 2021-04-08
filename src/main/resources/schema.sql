@@ -3,11 +3,11 @@ DROP TABLE IF EXISTS room;
 
 CREATE TABLE room
 (
-    room_id       INTEGER AUTO_INCREMENT,
-    room_name     VARCHAR(200) NOT NULL,
-    room_type     VARCHAR(200) NOT NULL,
-    bld_id        INTEGER      NOT NULL,
-    capacity      INTEGER      NOT NULL,
+    room_id   INTEGER AUTO_INCREMENT,
+    room_name VARCHAR(200) NOT NULL,
+    room_type VARCHAR(200) NOT NULL,
+    bld_id    INTEGER      NOT NULL,
+    capacity  INTEGER      NOT NULL,
     PRIMARY KEY (room_id)
 );
 

@@ -1,8 +1,8 @@
 package com.revature.dtos;
 
 /**
- * Data transfer object that is not persisted and is only meant to take the input from the request body. Has all the same
- * fields and methods as the entity version
+ * Data transfer object that is not persisted and is only meant to take the input from the request body. Has all the
+ * same fields and methods as the entity version
  */
 public class ReservationDTO {
 

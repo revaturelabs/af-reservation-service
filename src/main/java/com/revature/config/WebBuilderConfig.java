@@ -13,7 +13,7 @@ public class WebBuilderConfig {
     @LoadBalanced
     @Profile("default")
     public WebClient.Builder loadBalancedWebClientBuilder() {
-        return  WebClient.builder();
+        return WebClient.builder();
     }
 
     @Bean

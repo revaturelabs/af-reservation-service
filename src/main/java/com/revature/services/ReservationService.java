@@ -5,7 +5,9 @@ import com.revature.entities.Reservation;
 
 import java.util.Set;
 
-/** Interface for the reservation service CRUD methods*/
+/**
+ * Interface for the reservation service CRUD methods
+ */
 public interface ReservationService {
     Reservation createReservation(Reservation reservation);
 
