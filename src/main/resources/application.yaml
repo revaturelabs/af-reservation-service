@@ -15,6 +15,7 @@ spring:
         instanceId: ${spring.application.name}
         healthCheckPath: /health
         health-check-interval: 120s
+        service-name: ${spring.application.name}
 server:
   port: 8080
 #server:
