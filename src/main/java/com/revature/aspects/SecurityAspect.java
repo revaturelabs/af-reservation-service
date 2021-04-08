@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Before any controller method is called, the verifyJWT is called to make sure the jwt is valid. If valid, the user info

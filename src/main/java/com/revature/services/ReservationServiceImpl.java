@@ -144,17 +144,11 @@ public class ReservationServiceImpl implements ReservationService {
         if (beginTime > endTime) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid time range given.");
         }
-        reservations = new HashSet<Reservation>((Collection<? extends Reservation>) reservationRepo.findByTimeRange(beginTime, endTime));
+        reservations = new HashSet<>(reservationRepo.findByTimeRange(beginTime, endTime));
 
-        for (Reservation reservation : reservations) {
-            if (roomId != null && reservation.getRoomId() != roomId) {
-                reservations.remove(reservation);
-            } else if (status != null && !reservation.getStatus().equals(status)) {
-                reservations.remove(reservation);
-            } else if (reserver != null && !reservation.getReserver().equals(reserver)) {
-                reservations.remove(reservation);
-            }
-        }
+        reservations.removeIf(reservation -> (roomId != null && reservation.getRoomId() != roomId) ||
+                (status != null && !reservation.getStatus().equals(status)) ||
+                (reserver != null && !reservation.getReserver().equals(reserver)));
         return reservations;
     }
 
