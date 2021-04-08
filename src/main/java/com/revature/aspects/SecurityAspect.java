@@ -22,10 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityAspect {
     private Logger logger = Logger.getLogger(SecurityAspect.class);
 
-    public static String getEnv(String key) {
-        return System.getenv(key);
-    }
-
     @Autowired
     private WebClient.Builder webClientBuilder;
 
@@ -39,7 +35,7 @@ public class SecurityAspect {
         try{
             UserDTO userDTO = webClientBuilder.build()
                     // This uses the auth service from consul
-                    .post().uri("http://auth-service/verify")
+                    .post().uri(System.getenv("AUTH_SERVER"))
                     .body(Mono.just(auth), String.class)
                     .retrieve()
                     .onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
