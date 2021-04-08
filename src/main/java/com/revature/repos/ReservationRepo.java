@@ -14,10 +14,10 @@ import java.util.Set;
 @Component
 @Repository
 public interface ReservationRepo extends CrudRepository<Reservation, Integer> {
-    /**
-     * Gets all the reservation in a room of a certain status where the start and end times are within a specific range
-     */
-    @Query("select r from Reservation r WHERE ((r.startTime >= ?1 and r.startTime <= ?2) or (r.endTime >= ?1 and r.endTime <= ?2))")
+
+    /** Gets all the reservation in a room of a certain status where the start and end times are within a specific range */
+    @Query("select r from Reservation r WHERE ((r.startTime >= ?1 and r.startTime <= ?2) or (r.endTime >= ?1 and r.endTime <= ?2) or (r.startTime <= ?1 and r.endTime >= ?2))")
+
     Set<Reservation> findByTimeRange(long startTime, long endTime);
 
     /**
