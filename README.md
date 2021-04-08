@@ -20,67 +20,77 @@ will be in this form.
   "startTime": "Unix Epoch timestamp as number",
   "endTime": "Unix Epoch timestamp as number",
   "status": "reserved | cancelled",
-  "roomId": "Numeric Room Id from path"
+  "roomId": "Numeric Room Id from path",
+  "title": "Title of the Reservation"
 }
 ```
 
 ### Create new Reservation
-`POST /rooms/{roomId}/reservations`
+`POST /reservations`
 
 Expected Body:
 ```json
 {
   "startTime": "Unix Epoch timestamp as number",
-  "endTime": "Unix Epoch timestamp as number"
+  "endTime": "Unix Epoch timestamp as number",
+  "roomId": "ID of a valid room in the database",
+  "title": "Optional title, will be made reserver email if none is given"
 }
 ```
 Possible returns:
 - `201` with full reservation return body
-- `404 NOT FOUND` if invalid room ID is provided in the path
+- `404 NOT FOUND` if invalid or no room ID is provided
 - `406 NOT ACCEPTABLE` if startTime is after endTime
 - `409 CONFLICT` if given times conflict with times in the database
 
-### Get All Reservations for Room
-`GET /rooms/{roomId}/reservations?begin=number&end=number`
+### Get All Reservations
+`GET /reservations?start=number&end=number&reserver=string&status=string&roomId=number`
 
-Gets all reservations for a room with `roomId`. Optional parameters `begin` and `end` can be used to specify
-a range of times within which the desired time-frame is requested. Both are optional independent of each
-other meaning you could specify just a `begin` option and receive all active reservations after a given 
-time, or you could specify only an `end` option and receive all active reservations before a given time.
-The numbers provided should be Unix epoch times.
+Gets all reservations. Users can filter based on the optional parameters. Optional parameters
+include:
+- `start (Unix epoch time)` Set a floor for reservation times
+- `end (Unix epoch time)` Set a ceiling for reservation times
+- `reserver (Email string)` Search for only reservations made by a specific reserver
+- `status (Status string)` Search for only reservations with a given status. Valid statuses
+include `reserved` and `cancelled`.
+- `roomId (Integer)` Search for only reservations within a given room.
+
+It is recommended that some time range is always given when making calls to this endpoint, as
+not doing so will slow down response times considerably.
 
 Possible returns:
 - `200` with list of reservations bodies
-- `404 NOT FOUND` if invalid room ID is provided in the path
-- `406 NOT ACCEPTABLE` if begin is after end
+- `406 NOT ACCEPTABLE` if start is after end
 
 ### Get Reservation By Reservation ID
-`GET /rooms/{roomId}/reservations/{reservationId}`
+`GET /reservations/{reservationId}`
 
-Gets reservation with `reservationId` for a room with `roomId`.
+Gets reservation with `reservationId`.
 
 Possible returns:
 - `200` with full reservation return body
-- `404 NOT FOUND` if invalid room ID or reservation ID is provided in the path
+- `404 NOT FOUND` if invalid reservation ID is provided in the path
 
 ### Update Reservation By Reservation ID
-`PATCH /rooms/{roomId}/reservations/{reservationId}?action=cancel`
+`PATCH /reservations/{reservationId}?action=cancel`
 
 This method either, changes the times for a reservation in a room, or cancels a reservation
 in the database if the action query param is set to "cancel". If action is set to cancel,
-the body is ignored, if the action is set to anything else, it is ignored.
+the body is ignored, if the action is set to anything else, action is ignored. All the 
+body elements for updating are optional and if any are omitted, the old value will persist.
 
 Expected Body:
 ```json
 {
-  "startTime": "Unix Epoch timestamp as number",
-  "endTime": "Unix Epoch timestamp as number"
+  "startTime": "Unix Epoch timestamp as number (Optional)",
+  "endTime": "Unix Epoch timestamp as number (Optional)",
+  "title": "Title string to be updated to (Optional)"
 }
 ```
 
 Possible returns:
 - `200` with full reservation return body
-- `404 NOT FOUND` if invalid room ID or reservation ID is provided in the path
+- `404 NOT FOUND` if invalid reservation ID is provided
 - `406 NOT ACCEPTABLE` if startTime is after endTime
 - `403 FORBIDDEN` if user is attempting to change a reservation that isn't theirs
 - `409 CONFLICT` if the new times have a conflict with another reservation

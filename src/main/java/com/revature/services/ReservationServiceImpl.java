@@ -42,20 +42,17 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public Reservation createReservation(Reservation reservation) {
+        // check to make sure the times given are valid
+        if (reservation.getStartTime() > reservation.getEndTime()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
+        }
+
         // check to make sure the room exists
         Room room = roomRepo.findById(reservation.getRoomId()).orElse(null);
         if (room == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such Room");
         }
 
-        if (reservation.getTitle() == null || reservation.getTitle().equals("")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation must have a title");
-        }
-
-        // check to make sure the times given are valid
-        if (reservation.getStartTime() > reservation.getEndTime()) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
-        }
 
         // check to make sure there isn't a conflict with other reservations
         Set<Reservation> conflicts = reservationRepo.findConflicts(reservation.getRoomId(), reservation.getStartTime(), reservation.getEndTime());
@@ -63,6 +60,10 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Attempting to create reservation with conflicting time");
         }
 
+        // set title to be the name of the reserver if no title is given
+        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+            reservation.setTitle(reservation.getReserver());
+        }
         // sanitize before saving
         reservation.setReservationId(0);
         reservation.setStatus("reserved");
@@ -85,7 +86,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation to update");
         }
 
-        if (reservation.getStartTime() == 0) {
+
+        // check to see if the userDTO owns the reservation and if they're an admin
+        if (!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can update reservations that are not theirs");
+        }
+
+        if(reservation.getStartTime() == 0) {
+
             reservation.setStartTime(old.getStartTime());
         }
 
@@ -93,19 +101,16 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setEndTime(old.getEndTime());
         }
 
+        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+            reservation.setTitle(old.getTitle());
+        }
+
         // check to make sure the times given are valid
         if (reservation.getStartTime() > reservation.getEndTime()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid length of time, start time was after end time");
         }
 
-        // check to see if the userDTO owns the reservation and if they're an admin
-        if (!old.getReserver().equals(userDTO.getEmail()) && !userDTO.getRole().equals("admin")) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
-        }
 
-        if (reservation.getTitle() == null || reservation.getTitle().equals("")) {
-            reservation.setTitle(old.getTitle());
-        }
 
         // check to make sure there isn't a conflict with other reservations
         Set<Reservation> conflicts = reservationRepo.findConflicts(reservation.getRoomId(), reservation.getStartTime(), reservation.getEndTime());
@@ -122,6 +127,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setRoomId(old.getRoomId());
         reservation.setStatus("reserved");
+        reservation.setReserver(old.getReserver());
         return reservationRepo.save(reservation);
     }
 
