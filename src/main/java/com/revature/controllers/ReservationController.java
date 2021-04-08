@@ -14,19 +14,25 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
-/** Handles incoming requests through the specified URIs */
+/**
+ * Handles incoming requests through the specified URIs
+ */
 @Component
 @RestController
 @CrossOrigin
 public class ReservationController {
 
-    /** Reservation Service */
+    /**
+     * Reservation Service
+     */
     @Autowired
     ReservationService reservationService;
 
     /**
      * Create a reservation in a room
+     *
      * @param reservationDTO Reservation that is sent in
+     *
      * @return the reservation that was created and status
      */
     @Verify
@@ -46,11 +52,13 @@ public class ReservationController {
 
     /**
      * Get the reservations by room id
-     * @param roomId Unique room id
-     * @param start Specify the earliest time to return reservations
-     * @param end Specify the latest time to return reservations
+     *
+     * @param roomId   Unique room id
+     * @param start    Specify the earliest time to return reservations
+     * @param end      Specify the latest time to return reservations
      * @param reserver Specify the reserver to be filtered for in reservations
-     * @param status Specify the status to be filtered for in reservations
+     * @param status   Specify the status to be filtered for in reservations
+     *
      * @return The reservations of the specified room, time, reserver, and/or status
      */
     @Verify
@@ -68,7 +76,9 @@ public class ReservationController {
 
     /**
      * Get the reservation with a specified id
+     *
      * @param reservationId Unique the reservation id
+     *
      * @return The specified reservation and status
      */
     @Verify
@@ -85,9 +95,11 @@ public class ReservationController {
 
     /**
      * Update/patch the necessary data in the database. Query param will cancel the reservation
-     * @param reservationId Unique Reservation Id
-     * @param action Query param (default is "")
+     *
+     * @param reservationId  Unique Reservation Id
+     * @param action         Query param (default is "")
      * @param reservationDTO Reservation that is sent in
+     *
      * @return The updated reservation and status
      */
     @Verify
@@ -103,7 +115,7 @@ public class ReservationController {
             reservation = reservationService.cancelReservation(reservationId, userDTO);
         } else {
             //check if body was provided
-            if(reservationDTO == null) {
+            if (reservationDTO == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Must provided update body");
             }
             // update the reservation
@@ -121,7 +133,9 @@ public class ReservationController {
 
     /**
      * Helper method to switch the data transfer object into a Reservation entity object that is persisted
+     *
      * @param reservationDTO Reservation that is sent in
+     *
      * @return The new reservation object
      */
     public Reservation reservationTransfer(ReservationDTO reservationDTO) {
@@ -134,6 +148,10 @@ public class ReservationController {
         return reservation;
     }
 
+    /**
+     * Health check for consul
+     * @return true when completed
+     */
     @GetMapping("/health")
     public boolean health() {
         return true;

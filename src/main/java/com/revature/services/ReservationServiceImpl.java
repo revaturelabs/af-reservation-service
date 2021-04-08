@@ -15,21 +15,29 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Implementation of the service */
+/**
+ * Implementation of the service
+ */
 @Component
 @Service
 public class ReservationServiceImpl implements ReservationService {
-    /** Room Repository */
+    /**
+     * Room Repository
+     */
     @Autowired
     RoomRepo roomRepo;
 
-    /** Reservation Repository */
+    /**
+     * Reservation Repository
+     */
     @Autowired
     ReservationRepo reservationRepo;
 
     /**
      * Create the reservation in the database
+     *
      * @param reservation Reservation to save
+     *
      * @return Reservation with the new id
      */
     @Override
@@ -40,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such Room");
         }
 
-        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+        if (reservation.getTitle() == null || reservation.getTitle().equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation must have a title");
         }
 
@@ -63,8 +71,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     /**
      * Update the reservation to the new times
+     *
      * @param reservation Reservation being updated
-     * @param userDTO User data from the authorization service
+     * @param userDTO     User data from the authorization service
+     *
      * @return Updated reservation
      */
     @Override
@@ -75,11 +85,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such reservation to update");
         }
 
-        if(reservation.getStartTime() == 0) {
+        if (reservation.getStartTime() == 0) {
             reservation.setStartTime(old.getStartTime());
         }
 
-        if(reservation.getEndTime() == 0) {
+        if (reservation.getEndTime() == 0) {
             reservation.setEndTime(old.getEndTime());
         }
 
@@ -93,7 +103,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can cancel reservations that are not theirs");
         }
 
-        if(reservation.getTitle() == null || reservation.getTitle().equals("")) {
+        if (reservation.getTitle() == null || reservation.getTitle().equals("")) {
             reservation.setTitle(old.getTitle());
         }
 
@@ -117,42 +127,38 @@ public class ReservationServiceImpl implements ReservationService {
 
     /**
      * Get all the reservations that are reserved given filter params
-     * @param roomId Unique room id
-     * @param start Start time
-     * @param end End time
+     *
+     * @param roomId   Unique room id
+     * @param start    Start time
+     * @param end      End time
      * @param reserver Reserver email
-     * @param status Reservation status
+     * @param status   Reservation status
+     *
      * @return Set of the reserved rooms
      */
     @Override
-    public Set<Reservation> getCustomReservations(Integer roomId, Long start, Long end, String reserver, String status){
+    public Set<Reservation> getCustomReservations(Integer roomId, Long start, Long end, String reserver, String status) {
         Set<Reservation> reservations;
-        long beginTime = start == null ? Long.MIN_VALUE:start;
-        long endTime = end == null ? Long.MAX_VALUE:end;
-        if (beginTime > endTime){
+        long beginTime = start == null ? Long.MIN_VALUE : start;
+        long endTime = end == null ? Long.MAX_VALUE : end;
+        if (beginTime > endTime) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Invalid time range given.");
         }
-        reservations = new HashSet<Reservation>((Collection<? extends Reservation>) reservationRepo.findByTimeRange(beginTime, endTime));
+        reservations = new HashSet<>(reservationRepo.findByTimeRange(beginTime, endTime));
 
-        for (Reservation reservation: reservations){
-            if (roomId != null && reservation.getRoomId() != roomId){
-                reservations.remove(reservation);
-            }
-            else if (status != null && !reservation.getStatus().equals(status)){
-                reservations.remove(reservation);
-            }
-            else if (reserver != null && !reservation.getReserver().equals(reserver)){
-                reservations.remove(reservation);
-            }
-        }
+        reservations.removeIf(reservation -> (roomId != null && reservation.getRoomId() != roomId) ||
+                (status != null && !reservation.getStatus().equals(status)) ||
+                (reserver != null && !reservation.getReserver().equals(reserver)));
         return reservations;
     }
 
 
     /**
      * Cancel the reservation for that time frame
+     *
      * @param reservationId Unique reservation id
-     * @param userDTO User data from the authorization service
+     * @param userDTO       User data from the authorization service
+     *
      * @return Updated reservation
      */
     @Override
@@ -179,7 +185,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     /**
      * Get the reservation by the id
+     *
      * @param reservationId Unique reservation id
+     *
      * @return Reservation with the id
      */
     @Override
