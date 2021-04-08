@@ -239,6 +239,6 @@ public class ReservationServiceTests {
 
     @Test
     void get_active_reservations_by_room_id_invalid_time_range() {
-        Assertions.assertThrows(ResponseStatusException.class, ()-> service.getCustomReservations(2, (long) 5, (long)4, null, null));
+        Assertions.assertThrows(ResponseStatusException.class, () -> service.getCustomReservations(2, (long) 5, (long) 4, null, null));
     }
 }
