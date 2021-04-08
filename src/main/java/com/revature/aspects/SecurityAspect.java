@@ -36,10 +36,7 @@ public class SecurityAspect {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         String auth = request.getHeader("Authorization");
 
-        //WebClient webClient = WebClient.create("http://auth-service");
-
         try{
-            logger.info("TEST TEST");
             UserDTO userDTO = webClientBuilder.build()
                     // This uses the auth service from consul
                     .post().uri("http://auth-service/verify")
@@ -64,14 +61,6 @@ public class SecurityAspect {
             response.sendError(401, "Unable to verify JWT");
         }
         return null;
-
-        // THIS IS FOR TESTING (UNABLE TO FIGURE OUT HOW TO MOCK OUT ASPECT)
-//        UserDTO userDTO = new UserDTO(1,"email@revature.com","trainer");
-//        logger.info("JWT verified: " + userDTO);
-//        Object[] args = pjp.getArgs();
-//        args[0] = userDTO;
-//        Object obj = pjp.proceed();
-//        return obj;
     }
 
     @Pointcut("@annotation(com.revature.aspects.Verify)")
