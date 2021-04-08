@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class LoggingAspect {
-    private static Logger logger = Logger.getLogger(LoggingAspect.class);
+    private static final Logger logger = Logger.getLogger(LoggingAspect.class);
 
     /**
      * Log incoming request

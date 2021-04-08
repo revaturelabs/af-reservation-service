@@ -6,16 +6,13 @@ package com.revature.dtos;
  */
 public class ReservationDTO {
 
-    private int reservationId;
-    private String reserver;
-    private long startTime;
-    private long endTime;
-    private String status;
-    private int roomId;
-    private String title;
-
-    public ReservationDTO() {
-    }
+    private final int reservationId;
+    private final String reserver;
+    private final long startTime;
+    private final long endTime;
+    private final String status;
+    private final int roomId;
+    private final String title;
 
     public ReservationDTO(int reservationId, String reserver, long startTime, long endTime, String status, int roomId, String title) {
         this.reservationId = reservationId;

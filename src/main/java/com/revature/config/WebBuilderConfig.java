@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebBuilderConfig {
 
+    // bean to be used in production
     @Bean
     @LoadBalanced
     @Profile("default")
@@ -16,6 +17,7 @@ public class WebBuilderConfig {
         return WebClient.builder();
     }
 
+    // bean to be used for testing
     @Bean
     @Profile("test")
     public WebClient.Builder nonloadBalancedWebClientBuilder() {

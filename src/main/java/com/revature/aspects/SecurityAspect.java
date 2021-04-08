@@ -12,15 +12,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Before any controller method is called, the verifyJWT is called to make sure the jwt is valid. If valid, the user info
+ * is placed into the first arg of the controller. If not valid, throws error.
+ */
 @Component
 @Aspect
 public class SecurityAspect {
-    private Logger logger = Logger.getLogger(SecurityAspect.class);
+    private final Logger logger = Logger.getLogger(SecurityAspect.class);
 
     @Autowired
     private WebClient.Builder webClientBuilder;
@@ -29,7 +33,6 @@ public class SecurityAspect {
     public Object verifyJwt(ProceedingJoinPoint pjp) throws Throwable {
         // PRODUCTION CODE
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         String auth = request.getHeader("Authorization");
 
         try {
@@ -38,23 +41,19 @@ public class SecurityAspect {
                     .post().uri(System.getenv("AUTH_SERVER"))
                     .body(Mono.just(auth), String.class)
                     .retrieve()
-                    .onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
-                            clientResponse -> {
-                                Mono.empty();
-                                return null;
-                            })
+                    .onStatus(HttpStatus.UNAUTHORIZED::equals,
+                            clientResponse -> null)
                     .bodyToMono(UserDTO.class).block();
             logger.info(userDTO);
-            if (userDTO.getId() != 0) {
+            if (userDTO != null && userDTO.getId() != 0) {
                 logger.info("JWT verified: " + userDTO);
                 Object[] args = pjp.getArgs();
                 args[0] = userDTO;
-                Object obj = pjp.proceed();
-                return obj;
+                return pjp.proceed();
             }
         } catch (Exception e) {
             logger.error("Unable to verify JWT: " + e.getMessage());
-            response.sendError(401, "Unable to verify JWT");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unable to verify JWT");
         }
         return null;
     }

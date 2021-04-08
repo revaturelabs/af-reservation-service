@@ -148,6 +148,10 @@ public class ReservationController {
         return reservation;
     }
 
+    /**
+     * Health check for consul
+     * @return true when completed
+     */
     @GetMapping("/health")
     public boolean health() {
         return true;
