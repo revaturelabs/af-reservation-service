@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: reservation-service
+  jpa:
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+  cloud:
+    consul:
+      config:
+        enabled: false
+      discovery:
+        instanceId: ${spring.application.name}
+        healthCheckPath: /health
+        health-check-interval: 120s
+        service-name: ${spring.application.name}
+server:
+  port: 8080
+#server:
+#  port: 9000
